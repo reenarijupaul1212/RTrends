@@ -1,0 +1,220 @@
+<%- include('../layouts/header.ejs') %>
+
+    <%- include('../users/userHeader.ejs') %>
+
+
+        <!-- Breadcrumb Section Begin -->
+        <section class="breadcrumb-option">
+            <div class="container">
+                <div class="row">
+                    <div class="col-lg-12">
+                        <div class="breadcrumb__text">
+                            <h4>Order Details Page</h4>
+                            <div class="breadcrumb__links">
+                                <a href="/">Home</a>
+                                <a href="/orders">Orders</a>
+                                <span>Order Details Page</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <!-- Breadcrumb Section End -->
+
+        <!-- Checkout Section Begin -->
+        <section class=" spad p-0 mb-5">
+            <div class="container">
+
+
+                <div class="row  ">
+
+                    <h1 class="text-center my-5 font-weight-bold">ORDER DETAILS </h1>
+
+                    <div class="col-lg-12 col-md-12 h-auto">
+
+
+                        <div class="checkout__order checkout m-3 text-uppercase">
+
+                            <h4 class="order__title">Delivery Details</h4>
+
+                            <div>
+                                <p>Order Status : <%=orders.status%>
+                                </p>
+                            </div>
+
+                            <div>
+                                <p>Payment Method : <%=orders.paymentOption%>
+                                </p>
+                            </div>
+
+                            <div>
+                                <p>Order Date : <%=orders.orderDate%>
+                                </p>
+                            </div>
+
+                            <div>
+                                <p>Delivery Address:
+                                </p>
+                            </div>
+
+
+
+                            <div class="mt-4 " style="
+                            background-color: #f3f2ee;
+                         ">
+
+
+                                <P class=" mb-0">
+                                    <%=orders.shippingAddress %>
+                                </P>
+
+
+
+
+
+                                <p class=" mb-0">
+                                    
+                                </p>
+                                <p class=" mb-0">
+                                  
+                                </p>
+                                <p class=" mb-0">
+
+                                </p>
+                                <p class=" mb-0">
+                                   
+                                </p>
+                                <p class=" mb-0">
+
+                                </p>
+                                <p class=" mb-0">
+                                
+                                </p>
+                                <p class=" mb-0">
+                                    
+                                </p>
+
+
+
+
+
+
+
+                            </div>
+
+
+
+
+
+                        </div>
+
+
+                    </div>
+
+
+
+                    <div class="col-lg-12 col-md-12 text-uppercase">
+                        <div class="checkout__order checkout m-3 ">
+                            <h4 class=" order__title">Products Details</h4>
+                            <div class="checkout__order__products">Products <span>Total</span></div>
+                            <ul class="checkout__total__products">
+                                <% if (orders && orders.products && orders.products.length > 0) { %>
+                                    <% orders.products.forEach((product, index) => { %>
+                                        <li>
+                                            <div class="d-flex">
+                                                <div style="width: 74%;">
+                                                    <div>
+                                                        <%= index + 1 %> .
+                                                        
+                                                            <%= product.product.name %>
+                                                        </a>
+                                                        (<%= product.quantity %>* <%= product.price %> )
+                                                    </div>
+                                                </div>
+                                                <div style="width: 26%;" class="text-right d-inline-block">
+                                                    <% const total=product.price *product.quantity %>
+                                                    <%= total %>.00
+                                                </div>
+                                            </div>
+                                        </li>
+                                    <% }); %>
+                                <% } else { %>
+                                    <li>No products found.</li>
+                                <% } %>
+                            </ul>
+                            
+                            <ul class="checkout__total__all">
+
+                                <li>Gross Total <span>Rs.<%=orders.grossTotal .toFixed(2)%>
+                                    </span></li>
+                                <li>Coupon Discount <span>- <%=orders.discountAmount.toFixed(2) %></span></li>
+
+                                <% if(orders.categoryDiscount>= 0){%>
+                                    <li>Category Discount <span>- <%=orders.categoryDiscount.toFixed(2) %></span></li>
+                                    <%}%>
+                                        
+
+
+
+
+
+
+                            </ul>
+
+
+                            <ul class="checkout__total__all">
+
+                                <li class="font-weight-bold" style="color: green;">Final Price <span style="color:green;">Rs.
+                                        <%=orders.finalPrice.toFixed(2) %>
+                                    </span></li>
+
+
+                            </ul>
+                            <% if(orders.status==='pending'||orders.paymentStatus=== 'pending'||orders.paymentStatus==='failed'&& orders.paymentOption==='razorpay'){%>
+                            <div class=" w-100 d-flex justify-content-center">
+                                <button style="font-size: 1.1rem;" class="nav-link bg-dark text-white px-4 py-2">
+                                    <a class="nav-link" href="/paymentPage/<%=orders._id%>">Pay Again
+                                        </a></button>
+                            </div>
+
+                            <%}%>
+                            <% if( orders.clientOrderProcessingCompleted===true) { %>
+                                <div class=" w-100 d-flex justify-content-center">
+                                    <button style="font-size: 1.1rem;" class="nav-link bg-dark text-white px-4 py-2">
+                                        <a class="nav-link" href="/invoice/download/<%=orders._id%>">GET
+                                            INVOICE</a></button>
+                                </div>
+
+                                <%}%>
+
+
+
+
+
+
+
+
+
+
+
+                        </div>
+                    </div>
+                </div>
+
+
+
+
+            </div>
+
+        </section>
+        <!-- Checkout Section End -->
+
+
+
+        <%- include('../users/userFooter.ejs') %>
+
+
+
+
+            <%- include('../layouts/footer.ejs') %>

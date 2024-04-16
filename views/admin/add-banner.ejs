@@ -1,0 +1,74 @@
+  <!-- Breadcrumb Section Begin -->
+
+  <section class="breadcrumb-option">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="breadcrumb__text">
+
+                    <h2 class="text-center font-weight-bold" style="color: rgba(22, 22, 22, 0.751);">Admin
+                        Dashboard
+                    </h2>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<div class="container mt-5">
+    <h2>Add Banner</h2>
+    <form  onsubmit="return validateForm()" action="/admin/add-banner" method="POST" enctype="multipart/form-data">
+        <!-- Banner Name -->
+        <div class="mb-3">
+            <label for="name" class="form-label">Banner Name</label>
+            <input type="text" class="form-control" id="name" name="name" required>
+        </div>
+
+        <!-- Banner Description -->
+        <div class="mb-3">
+            <label for="description" class="form-label">Banner Description</label>
+            <textarea class="form-control" id="description" name="description" rows="3" required></textarea>
+        </div>
+
+        <!-- Banner Image -->
+        <div class="mb-3">
+            <label for="image" class="form-label">Banner Image</label>
+            <input type="file" class="form-control" id="image" name="image" required>
+        </div>
+
+        <!-- Active -->
+        <div class="mb-3 form-check">
+            <input type="checkbox" class="form-check-input" id="active" name="active" checked>
+            <label class="form-check-label" for="active">Active</label>
+        </div>
+
+        <!-- Submit Button -->
+        <button type="submit" class="btn btn-primary">Add Banner</button>
+    </form>
+</div>
+
+<!-- Include SweetAlert CDN link in your HTML file -->
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+<script>
+    function validateForm() {
+        var nameInput = document.getElementById('name').value.trim();
+        var descriptionInput = document.getElementById('description').value.trim();
+
+        if (nameInput === '' || descriptionInput === '') {
+            // Show SweetAlert error message if any of the fields are empty
+            Swal.fire({
+                icon: 'error',
+                title: 'Error',
+                text: 'Please fill in all required fields.',
+                confirmButtonText: 'OK'
+            });
+            return false; // Prevent form submission
+        }
+
+        // Optionally, you can perform additional validation here
+
+        return true; // Proceed with form submission if all validations pass
+    }
+</script>

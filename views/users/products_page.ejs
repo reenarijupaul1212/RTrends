@@ -1,0 +1,296 @@
+<%- include('../layouts/header.ejs') %>
+
+    <%- include('../users/userHeader.ejs') %>
+
+
+
+        <!-- Breadcrumb Section Begin -->
+        <section class="breadcrumb-option">
+            <div class="container">
+                <div class="row">
+                    <div class="col-lg-12">
+                        <div class="breadcrumb__text">
+                            <h4>Shops</h4>
+                            <div class="breadcrumb__links">
+                                <a href="/">Home</a>
+                                <span>Shop</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <!-- Breadcrumb Section End -->
+
+        <!-- Shop Section Begin -->
+        <section class="shop spad" style="background-color: rgba(255, 255, 255, 0.557);">
+            <div class="mx-2 mx-md-3">
+                <div class="row ">
+                    <div class="col-md-3">
+                        <div class="shop__sidebar row pt-0">
+
+
+                            <div class="shop__sidebar__search col-4 col-md-12 ">
+                                <form action="#" id="searchBar">
+                                    <input style="font-size: .8rem; " type="text" placeholder="Search..." id="search">
+
+                                    <button type="submit"><span class="icon_search ml-1"></span></button>
+                                </form>
+                            </div>
+
+
+
+
+
+
+                            <div class="shop__sidebar__search col-4 col-md-12">
+                                <div class="w-100 d-flex justify-content-start ">
+
+                                    <div class="shop__product__option__right w-100  pt-0">
+
+                                        <select name="sortby" id="sortby" class="sortby w-100" style="font-size: .7rem; font-weight: bold;padding: 10px; -webkit-appearance: none;
+                                            -moz-appearance: none;
+                                            text-indent: 1px;
+                                            text-overflow: '';
+                                            text-align: center;
+                                            min-height: 42px;">
+
+                                            <option value="" <% if (!sortBy) { %> selected <% } %> disabled>SORT BY
+                                            </option>
+                                            <option value="lowPrice" <% if (sortBy==='lowPrice' ) { %> selected <% } %>
+                                                    >PRICE LOW TO HIGH
+                                            </option>
+                                            <option value="highPrice" <% if (sortBy==='highPrice' ) { %> selected <% }
+                                                    %>>PRICE HIGHT TO LOW
+                                            </option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+
+
+                            <div class="shop__sidebar__search col-4 col-md-12">
+                                <div class="w-100 d-flex justify-content-start ">
+
+                                    <div class="shop__product__option__right w-100  pt-0">
+
+                                        <select name="categories" id="categories" class="categories catSearch w-100"
+                                            style="font-size: .7rem; font-weight: bold;padding: 10px; -webkit-appearance: none;
+                                            -moz-appearance: none;
+                                            text-indent: 1px;
+                                            text-overflow: '';
+                                            text-align: center;
+                                            min-height: 42px;">
+
+                                            <option value="" <% if (!sortBy) { %> selected <% } %> disabled> CATEGORIES
+                                            </option>
+
+
+                                            <% if(categories && categories.length>0) {%>
+
+                                                <% for(let i=0;i<categories.length;i++){ %>
+
+                                                    <option value="<%= categories[i]._id %>" <% if
+                                                        (categories[i]._id.toString()===categoryID ) { %> selected <% }
+                                                            %>
+                                                            ><%= categories[i].name %>
+                                                    </option>
+
+
+
+
+                                                    <% } %>
+
+                                                        <%}%>
+
+
+
+
+
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+
+
+
+
+                        </div>
+                    </div>
+                    <div class="col-md-9  mt-lg-0">
+
+
+
+                        <div class="row justify-content-center">
+
+                            <% if(products && products.length>0){ %>
+                                <% for(let i=0; i < products.length ;i++) { %>
+
+
+                                    <div class="col-lg-4 col-md-4  m-0" style="max-width: 262px;">
+
+                                        <div class="product__item">
+                                            <div click-id="productDetailsLink" group-id="<%=products[i].groupingID%>"
+                                                color-id="<%=products[i].color%>"
+                                                class="product__item__pic set-bg add-hover mt-1" data-id="bg-render"
+                                                data-for-bg="/upload/products/<%=products[i].image%>"
+                                                style="background-size: cover;background-position: top;
+                                                background-repeat: no-repeat;">
+
+
+
+                                                <ul class="product__hover">
+                                                    <li>
+                                                        <button data-id="<%=products[i]._id%>"
+                                                            class="nav-link wishListBtn "><img src="/img/icon/heart.png"
+                                                                alt=""></button>
+
+                                                    </li>
+                                                    <li><a href="#"><img src="/img/icon/compare.png" alt="">
+                                                            <span>Compare</span></a>
+                                                    </li>
+                                                 <li><a href="/sproducts_page/<%=products[i]._id %>"><img src="img/icon/search.png" alt=""></a></li> 
+                                                </ul>
+                                            </div>
+                                            <div class="product__item__text">
+                                                <h6>
+                                                    <%=products[i].name%>
+                                                </h6>
+
+                                                <button class="nav-link" ><a  href="/sproducts_page/<%=products[i]._id %>"
+                                                        class="">+
+                                                        Add to cart</a></button>
+
+                                                <div class="rating">
+                                                    <i class="fa fa-star-o"></i>
+                                                    <i class="fa fa-star-o"></i>
+                                                    <i class="fa fa-star-o"></i>
+                                                    <i class="fa fa-star-o"></i>
+                                                    <i class="fa fa-star-o"></i>
+                                                </div>
+
+                                                <div class="d-flex product__text2">
+                                                    <h5 class="  w-100">
+
+                                                        <span class="mr-3" <% if(products[i].onOffer &&
+                                                            products[i].rateOfDiscount>0){ %>
+
+
+                                                            style="color:grey;text-decoration: line-through;"
+
+                                                            <%}%>
+                                                                >
+                                                                ₹ <%=products[i].price%>
+                                                        </span>
+
+
+
+
+                                                        <% if(products[i].onOffer && products[i].rateOfDiscount>
+                                                            0){ %>
+
+
+                                                            ₹ <%=products[i].offerPrice%>
+                                                    </h5>
+
+                                                    <%}%>
+
+
+                                                </div>
+
+
+
+
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <% } } else{ %>
+
+                                        <h3 class="text-danger"> Failed to load the products</h3>
+
+
+                                        <% }%>
+                        </div>
+
+                    </div>
+        </section>
+
+
+        <nav aria-label="Page navigation" id="pagination">
+            <ul class="pagination justify-content-center">
+                <li class=""
+                    style="width: 70px; background-color: black; padding: 8px ; text-align: center ; color: aliceblue;text-decoration: none;   border-radius: 10px 0 0 10px;    border: 1px solid #000;border-right: 1px solid gainsboro;  ">
+
+                    <a <% if (currentPage>1) { %>
+                        href="/?category=<%=categoryID%>&sortBy=<%=sortBy%>&search=<%= search %>&page=<%= previous %>"
+                                        <%}%>
+                                            class="nav-link"
+
+                                            aria-label="Previous" tabindex="-1" aria-disabled="true">
+                                            <span aria-hidden="true"><i class="icon-long-arrow-left"></i></span>Prev
+                    </a>
+
+
+
+                </li>
+                <%for(let i=1;i<=totalPages;i++){%>
+                    <%if(i==currentPage){%>
+                        <li style="width: 70px; background-color: rgb(26, 26, 26); padding: 8px ; text-align: center ; color: aliceblue;text-decoration: none; border-right: 1px solid gainsboro;"
+                            class="  " aria-current="page">
+                            <%=i%>
+                        </li>
+                        <%}else{%>
+                            <li style="width: 70px; background-color: black; padding: 8px ; text-align: center ; color: aliceblue;text-decoration: none; border-right: 1px solid gainsboro;"
+                                class=" " aria-current="page">
+                                <a class="nav-link"
+                                    href="?category=<%=categoryID%>&sortBy=<%=sortBy%>&search= <%=search%>&page=<%=i%>">
+                                    <%= i %>
+                                </a>
+                            </li>
+                            <%}%>
+
+                                <%}%>
+
+
+                                    <li style="width: 70px; background-color: black; padding: 8px ; text-align: center ; color: aliceblue;text-decoration: none;   border-radius: 0px 10px 10px 0px;    border: 1px solid #000; "
+                                        class="">
+
+                                        <a class=" nav-link" <% if (currentPage < totalPages) { %>
+
+                                            href="/?category=<%=categoryID%>&sortBy=<%=sortBy%>&search=<%= search %>
+                                                        &page=<%= next %>"
+                                                            <%}%>
+
+
+                                                                aria-label="Next">Next
+                                                                <span aria-hidden="true"><i
+                                                                        class="icon-long-arrow-right"></i>
+                                                                </span>
+                                        </a>
+
+
+
+                                    </li>
+            </ul>
+        </nav>
+
+        <%- include('../users/userFooter.ejs') %>
+            <script src="/js/user/products_page.js"></script>
+            <%- include('../layouts/footer.ejs') %>
+
+            <script>
+                window.addEventListener('DOMContentLoaded', (event) => {
+                    // Get the id of the item from the URL hash
+                    const itemId = window.location.hash.substr(1);
+            
+                    // Find the item by its id
+                    const item = document.getElementById(itemId);
+            
+                    // If the item exists, add the highlight class
+                    if (item) {
+                        item.classList.add('highlight');
+                    }
+                });
+            </script>
+            

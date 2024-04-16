@@ -1,0 +1,52 @@
+<!-- Breadcrumb Section Begin -->
+<section class="breadcrumb-option">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="breadcrumb__text">
+                    <h2 class="text-center font-weight-bold" style="color: rgba(22, 22, 22, 0.751);">Admin Dashboard</h2>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<main class="main my-5">
+    <div class="container">
+        <div class="table-responsive" id="no-more-tables">
+            <% if(categories && categories.length > 0) { %>
+                <table class="table table-striped bg-white" id="myTable">
+                    <thead class="">
+                        <tr>
+                            <th class="bg-dark text-white text-center" style="font-size: 15px;">Name</th>
+                            <th class="bg-dark text-white text-center" style="font-size: 15px;">Description</th>
+                            <th class="bg-dark text-white text-center" style="font-size: 15px;">Discount (rs)</th>
+                            <th class="bg-dark text-white text-center" style="font-size: 15px;">Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <% categories.forEach(category => { %>
+                            <tr data-id="<%= category._id %>" class="text-center" style="font-size: medium;">
+                                <td data-title="Name"><%= category.name %></td>
+                                <td data-title="Description"><%= category.discountName %></td>
+                                <td data-title="Discount"><%= category.discountAmount %></td>
+                                <td data-title="Actions">
+                                    <% if(category.onDiscount) { %>
+                                        <button id="deactive" class="deactive" data="<%= category._id %>">Deactivate</button>
+                                    <% } else { %>
+                                        <button class="activate" data="<%= category._id %>">Activate</button>
+                                    <% } %>
+                                </td>
+                            </tr>
+                        <% }); %>
+                    </tbody>
+                </table>
+            <% } else { %>
+                <h4 class="text-center font-weight-bold text-danger">No Categories With Discounts Were Found</h4>
+            <% } %>
+        </div>
+    </div>
+</main>
+
+<script src="/js/admin/categoryOffers.js"></script>
+<script src="/js/dataTables.js"></script>

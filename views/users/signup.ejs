@@ -1,0 +1,153 @@
+<%- include('../layouts/header.ejs') %>
+
+    <%- include('../users/userHeader.ejs') %>
+        <main class="main h-auto  d-flex justify-content-center">
+            <div class="login-page bg-image  pb-8 pt-md-12 pb-md-12 pt-lg-17 pb-lg-17 mt-2 mx-lg-5 w-100 mb-4 d-flex justify-content-center"
+                style=" background-image: url('/img/login-bg.jpg');">
+
+
+                <div class=" col-lg-4 col-sm-6 col-11 p-5 " style="background-color:rgb(177, 174, 174);">
+
+                    <!-- Pills navs -->
+                    <ul class="nav border  border-white border-2 nav-justified mb-3 " id="ex1" role="tablist">
+                        <li class="nav-item" role="presentation">
+                            <a class="nav-link active font-weight-bold text-dark" id="tab-login" data-mdb-toggle="pill"
+                                href="/signup" style="text-align: center;" role="tab" aria-controls="pills-login"
+                                aria-selected="true">
+                                <h2 style="font-weight: bold;">Registration</h2>
+                            </a>
+                        </li>
+
+                    </ul>
+                    <!-- Pills navs -->
+
+                    <!-- Pills content -->
+                    <div class="tab-content mt-5">
+
+
+
+                        <div class="" id="pills-register" role="tabpanel" aria-labelledby="tab-register">
+                            <form action="/signup" method="post" onsubmit="return validateForm()">
+
+
+                                <!-- Name input -->
+                                <div class="form-outline mb-4 required">
+                                    <input type="text" id="name" class="form-control" name="name" required />
+                                    <label class="form-label" for="name">Name</label>
+                                </div>
+
+                                <!-- Username input -->
+                                <div class="form-outline mb-4">
+                                    <input type="email" id="email" class="form-control" name="email" required />
+                                    <label class="form-label" for="email">Email</label>
+                                </div>
+
+                                <!-- Email input -->
+                                <div class="form-outline mb-4">
+                                    <input type="tel" id="phone"   class="form-control" name="mobile" />
+                                    <label class="form-label" for="mobile">Phone</label>
+                                </div>
+
+
+
+
+                                <!-- Password input -->
+                                <div class="form-outline mb-4">
+                                    <input type="password" id="Password" class="form-control" name="password" />
+                                    <label class="form-label" for="Password">Password</label>
+                                </div>
+
+                                <!-- Password input -->
+                                <div class="form-outline mb-4">
+                                    <input type="password" id="Confirm" class="form-control" name="confirm" />
+                                    <label class="form-label" for="Password"> Confirm Password</label>
+                                </div>
+
+                                <!-- Submit button -->
+                                <button data-id="signInBtn" type="submit" class="btn btn-dark btn-block mb-3">Sign
+                                    in</button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+
+
+
+
+
+            </div>
+            <!-- End .login-page section-bg -->
+        </main>
+        <!-- End .main -->
+
+
+
+        <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+
+        <%- include('../users/userFooter.ejs') %>
+
+            <script src="/js/user/removeResendData.js"></script>
+
+            <%- include('../layouts/footer.ejs') %>
+                <script>
+                    function validateForm() {
+                        // Get form inputs
+                        var name = document.getElementById('name').value;
+                        var email = document.getElementById('email').value;
+                        var phone = document.getElementById('phone').value;
+                        var password = document.getElementById('Password').value;
+                        var confirm = document.getElementById('Confirm').value;
+
+                        // Regular expressions for validation
+                        var emailRegex = /^\w+@[a-zA-Z_]+?\.[a-zA-Z]{2,3}$/;
+                        var phoneRegex = /^\d{10}$/;
+                        // Regular expressions for password validation
+                        const specialCharRegex = /[!@#$%^&*(),.?":{}|<>]/;
+                        const capitalLetterRegex = /[A-Z]/;
+                        const smallLetterRegex = /[a-z]/;
+
+                        // Perform validation
+                        if (name.trim() === '' || email.trim() === '' || phone.trim() === '' || password.trim() === '' || confirm.trim() === '') {
+                            Swal.fire('Error', 'All fields are required', 'error');
+                            return false;
+                        }
+
+                        if (!emailRegex.test(email)) {
+                            Swal.fire('Error', 'Please enter a valid email address', 'error');
+                            return false;
+                        }
+
+                        if (!phoneRegex.test(phone)) {
+                            Swal.fire('Error', 'Please enter a valid 10-digit phone number', 'error');
+                            return false;
+                        }
+
+                        // Check if the password meets the criteria
+                        if (password.length < 6) {
+                            Swal.fire('Error', 'Password must be at least 6 characters long', 'error');
+                            return false;
+                        } else if (!specialCharRegex.test(password)) {
+                            Swal.fire('Error', 'Password must contain at least one special character', 'error');
+                            return false;
+                        } else if (!capitalLetterRegex.test(password)) {
+                            Swal.fire('Error', 'Password must contain at least one capital letter', 'error');
+                            return false;
+                        } else if (!smallLetterRegex.test(password)) {
+                            Swal.fire('Error', 'Password must contain at least one small letter', 'error');
+                            return false;
+                        } else  if (password !== confirm) {
+                        Swal.fire('Error', 'Password and confirm password do not match', 'error');
+                        return false;
+                        } else
+                        {
+                            return true; // Password meets all criteria
+                        }
+                    
+
+                   
+
+                    // If all validation passes, submit the form
+                    return true;
+                }
+                </script>

@@ -1,0 +1,81 @@
+  <!-- Offcanvas Menu Begin -->
+  <div class="offcanvas-menu-overlay"></div>
+  <div class="offcanvas-menu-wrapper">
+      <div class="offcanvas__option">
+          <div>
+              <% if(user) { %>
+                  <a class="font-weight-bolder text-dark" href="/profile">Profile</a>
+              <% } else { %>
+                  <a class="font-weight-bolder text-dark" href="/login">Login</a>
+              <% } %>
+          </div>
+      </div>
+      <div class="offcanvas__nav__option">
+          <a href="/search"><img src="/img/icon/search.png" alt=""></a>
+          <a href="/wishlist"><img src="/img/icon/heart.png" alt=""></a>
+          <a href="/cart"><img src="/img/icon/cart.png" alt=""></a>
+          <% if(user) { %>
+              <a class="dropdown-toggle" href="#" role="button" id="userDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+                  <img src="/img/icon/user.png" alt="">
+              </a>
+              <ul class="dropdown-menu" aria-labelledby="userDropdown">
+                  <li><a class="dropdown-item" href="/profile">Profile</a></li>
+                  <li><a class="dropdown-item" href="/logout">Logout</a></li>
+              </ul>
+          <% } else { %>
+              <a class="font-weight-bolder text-dark" href="/login">Login</a>
+          <% } %>
+      </div>
+      <!-- Other offcanvas content -->
+  </div>
+  <!-- Offcanvas Menu End -->
+
+  <!-- Header Section Begin -->
+  <header class="header">
+      <div class="header__top">
+          <!-- Header top content -->
+      </div>
+      <div class="container-fluid">
+          <div class="row">
+              <div class="col-lg-3 col-md-3">
+                  <div class="header__logo">
+                      <a href="/"><img src="/img/logo.png" alt=""></a>
+                  </div>
+              </div>
+              <div class="col-lg-6 col-md-6">
+                  <nav class="header__menu mobile-menu">
+                      <ul>
+                          <li><a href="/">Home </a></li>
+                          <li><a href="/product">Shop</a></li>
+                          <% if(user) { %>
+                              <li><a href="/orders">Orders</a></li>
+                          <% } %>
+                      </ul>
+                  </nav>
+              </div>
+              <div class="col-lg-3 col-md-3">
+                  <div class="header__nav__option ">
+                      <div style="padding-top: 3px;">
+                          <a href="/products_page/#searchBar"><img src="/img/icon/search.png" alt=""></a>
+                          <a href="/wishlist"><img src="/img/icon/heart.png" alt=""></a>
+                          <a href="/cart"><img src="/img/icon/cart.png" alt=""></a>
+                          <% if(user){ %>
+                              <a href="/wallet"><img src="/img/wallet.png" alt=""></a>
+                          <% } %>
+                          <% if(user) { %>
+                              <a class="dropdown-toggle" href="#" role="button" id="userDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+                                  <img src="/img/icon/user.png" alt="">
+                              </a>
+                              <ul class="dropdown-menu" aria-labelledby="userDropdown">
+                                  <li><a class="dropdown-item" href="/profile">Profile</a></li>
+                                  <li><a class="dropdown-item" href="/logout">Logout</a></li>
+                              </ul>
+                          <% } else { %>
+                              <a class="font-weight-bolder text-dark" href="/login">Login</a>
+                          <% } %>
+                      </div>
+                  </div>
+              </div>
+          </div>
+          <div class="canvas__open"><i class="fa fa-bars"></i></div>
+      </div>

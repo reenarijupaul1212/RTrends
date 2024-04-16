@@ -1,0 +1,89 @@
+  <!-- Breadcrumb Section Begin -->
+
+  <section class="breadcrumb-option">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="breadcrumb__text">
+
+                    <h2 class="text-center font-weight-bold" style="color: rgba(22, 22, 22, 0.751);">Admin
+                        Dashboard
+                    </h2>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+<section>
+    
+    <div class="container mt-5">
+        <h2>Edit Brand</h2>
+        <form  id="editBrandForm" action="/admin/edit_brand/<%= brand._id %>" method="post" enctype="multipart/form-data">
+            <div class="mb-3">
+                <label for="name" class="form-label">Brand Name</label>
+                <input type="text" class="form-control" id="name" name="name" value = "<%= brand.name %>" required>
+            </div>
+            <div class="mb-3">
+                <label for="image" class="form-label">Brand Image</label>
+                <!-- Display the current brand image -->
+                 <img src="/upload/brand/<%= brand.image %>" alt="Brand Image" class="img-fluid">
+                <input type="file" class="form-control" name="image" value=""  >
+            </div>
+            <div class="mb-3 form-check">
+                <input type="checkbox" class="form-check-input" id="active" name="active" value="on"<% if (brand.active) { %>checked<% } %>>
+                <label class="form-check-label" for="active">Active</label>
+            </div>
+            <button type="submit" class="btn btn-primary">Update Brand</button>
+        </form>
+        <% if (error) { %>
+            <div class="alert alert-danger" role="alert">
+                <%= error %>
+            </div>
+        <% } else if (success) { %>
+            <div class="alert alert-success" role="alert">
+                <%= success %>
+            </div>
+        <% } %>
+    </div>
+
+    <script>
+        
+    document.addEventListener("DOMContentLoaded", function() {
+        // Add an event listener to the form submit event
+        document.getElementById("editBrandForm").addEventListener("submit", function(event) {
+            // Select all input and textarea elements within the form
+            const formInputs = this.querySelectorAll("input, textarea");
+            let isValid = true;
+
+            // Iterate over each input element
+            formInputs.forEach(function(input) {
+                // Trim the value of each input element
+                input.value = input.value.trim();
+
+                // Perform validation based on input type
+                switch (input.type) {
+                    case "text":
+                    case "textarea":
+                        // Check if the input value is empty
+                        if (input.value === "") {
+                            isValid = false;
+                            // Add a class to indicate invalid input
+                            input.classList.add("is-invalid");
+                        } else {
+                            // Remove any existing invalid class
+                            input.classList.remove("is-invalid");
+                        }
+                        break;
+                    // Add validation for other input types as needed
+                }
+            });
+
+            // Prevent form submission if validation fails
+            if (!isValid) {
+                event.preventDefault();
+            }
+        });
+    });
+
+    </script>

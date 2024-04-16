@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="description" content="Male Fashion">
+    <meta name="keywords" content="Male Fashion, unica, creative, html">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>RTrends</title>
+
+    <!-- External CSS -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.3.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/css/style.css"> <!-- Add your custom styles here -->
+
+    <!-- Internal CSS -->
+    <style>
+        /* Add custom CSS styles here */
+        body {
+            margin: 2rem;
+            font-family: Arial, sans-serif;
+        }
+
+        .invoice-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 2px solid #ddd;
+            padding-bottom: 1rem;
+            margin-bottom: 2rem;
+        }
+
+        .invoice-header img {
+            max-width: 100px;
+        }
+
+        .invoice-details {
+            font-size: 1.1rem;
+        }
+
+        .invoice-table {
+            margin-top: 1rem;
+        }
+
+        .invoice-table th,
+        .invoice-table td {
+            vertical-align: middle;
+            text-align: center;
+        }
+
+        .checkout__total__all {
+            border: 1px solid #ddd;
+            padding: 1rem;
+            margin-top: 2rem;
+        }
+
+        .checkout__total__all p {
+            margin-bottom: 0.5rem;
+        }
+
+        .checkout__total__all p span {
+            font-weight: bold;
+            margin-left: 1rem;
+        }
+    </style>
+</head>
+
+<body>
+
+    <section class="spad p-0 mb-5 min-height-800">
+        <div class="container">
+
+            <!-- Invoice Header Section -->
+            <div class="invoice-header">
+                <div>
+                    <img src='' alt="RTrends Logo">
+                </div>
+                <div class="invoice-details text-end">
+                    <div class="font-weight-bold">RTrends</div>
+                    <div>14B, Zoom Street</div>
+                    <div>Greater Kingdom</div>
+                    <div>New York 20000</div>
+                    <div>U.S.A</div>
+                </div>
+            </div>
+
+            <!-- Order Details -->
+            <div class="mb-4">
+                <div>Order Status: <%= orders.status %></div>
+                <div>Billing Address:</div>
+                <div><%= orders.fullName %></div>
+                <div><%= orders.shippingAddress %></div>
+            </div>
+
+            <!-- Products Table -->
+            <div class="invoice-table">
+                <table class="table table-bordered">
+                    <thead>
+                        <tr class="text-center">
+                            <th>S.No</th>
+                            <th>PRODUCT NAME</th>
+                            <th>QUANTITY</th>
+                            <th>RATE</th>
+                            <th>TOTAL</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <% if (orders && orders.products && orders.products.length > 0) { %>
+                            <% orders.products.forEach((product, index) => { %>
+                                <tr class="text-center">
+                                    <td><%= index + 1 %></td>
+                                    <td><%= product.product.name %></td>
+                                    <td><%= product.quantity %></td>
+                                    <td>Rs <%= product.price.toFixed(2) %></td>
+                                    <% const total = product.price * product.quantity %>
+                                    <td>Rs <%= total.toFixed(2) %></td>
+                                </tr>
+                            <% }) %>
+                        <% } %>
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- Total Amounts -->
+            <div class="checkout__total__all px-5 mb-2">
+                <p>GROSS TOTAL <span>Rs <%= orders.grossTotal.toFixed(2) %></span></p>
+                <p>COUPON DISCOUNT <span>Rs <%= orders.discountAmount.toFixed(2) %></span></p>
+                <% if (orders.categoryDiscount >= 0) { %>
+                    <p>CATEGORY DISCOUNT <span>Rs <%= orders.categoryDiscount.toFixed(2) %></span></p>
+                <% } %>
+            </div>
+            <div class="checkout__total__all border-0 px-5">
+                <p class="font-weight-bold">FINAL PRICE <span>Rs <%= orders.finalPrice %></span></p>
+            </div>
+
+        </div>
+    </section>
+
+    <!-- External JS -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.3.2/js/bootstrap.bundle.min.js" integrity="sha512-X/YkDZyjTf4wyc2Vy16YGCPHwAY8rZJY+POgokZjQB2mhIRFJCckEGc6YyX9eNsPfn0PzThEuNs+uaomE5CO6A==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script src="/js/main.js"></script> <!-- Add your custom JavaScript here -->
+
+</body>
+
+</html>

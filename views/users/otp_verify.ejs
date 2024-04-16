@@ -1,0 +1,206 @@
+<%- include('../layouts/header.ejs') %>
+
+    <%- include('../users/userHeader.ejs') %>
+        <main class="main h-auto mb-5 d-flex justify-content-center">
+            <div class="login-page bg-image pt-8 pb-8 pt-md-12 pb-md-12 pt-lg-17 pb-lg-17 mt-2 mx-lg-5 col-lg-9 col-sm-10 mb-4 d-flex justify-content-center"
+                style="background-image: url('/img/login-bg.jpg');
+      ">
+
+
+                <div class="bg-white col-lg-6 col-sm-8 col-11 p-5 my-5">
+
+                    <h2 class="text-center font-weight-bold m-3">Verify Your Email Address</h2>
+
+
+
+
+
+                    <div class="tab-content">
+                        <div class="" id="pills-login" role="tabpanel" aria-labelledby="tab-login">
+                            <div id="error-message" style="color: red;"></div>
+                            <div id="message" style="color: green;"></div>
+                            <form >
+
+
+                                <div class="form-outline mb-4">
+                                    <input type="text" id="otp" name="otp" class="form-control" />
+                                    <input type="hidden"  id='email' name="email" value="<%= email %>">
+                                </div>
+
+
+
+                                <!-- Submit button -->
+
+                                <button id="verify" type="submit" class="btn btn-dark btn-block mt-3 mb-4">VERIFY</button>
+
+<script>
+   document.addEventListener('DOMContentLoaded', function() { 
+ document.getElementById('verify').addEventListener('click', function(event) {
+    event.preventDefault();
+    const otpValue = document.getElementById('otp').value; // Get OTP value from input field 
+    const email=document.getElementById('email').value;
+    fetch('/otp_verify', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ otp: otpValue,email:email }) // Sending OTP data to the server
+    })
+    .then(response => {
+       
+        return response.json();
+    })
+    .then(data => {
+        if (data.success) {
+            // If OTP verification is successful, show success message on the screen
+            const errorMessageContainer = document.getElementById('error-message');
+            errorMessageContainer.innerText = '';
+            const messageContainer = document.getElementById('message');
+            messageContainer.innerText = 'OTP verified successfully. Redirecting to login...';
+            // You can redirect to the login page after a delay if needed
+            setTimeout(() => {
+                window.location.href = '/login';
+            }, 2000); // Redirect after 2 seconds (2000 milliseconds)
+        } else {
+            // If OTP verification fails, display the error message on the screen
+            const errorMessageContainer = document.getElementById('error-message');
+            errorMessageContainer.innerText = 'Failed to verify OTP. Please try again.';
+        }
+    })
+    .catch(error => {
+        console.error('Error:', error);
+        alert(error);
+    });
+}); });
+</script>
+                            </form>
+
+                            <div class="counterDiv d-flex align-content-center justify-content-center">
+
+                                <p class="font-weight-bold text-success " style="font-size: 1.2rem;" id="timer"></p>
+                            </div>
+
+
+                            <div class="d-flex justify-content-center">
+                                <button data-id="resendOtpButton" style="display:none" onclick="resendOTP()"
+                                    class="nav-link  "
+                                    style="color:rgb(35, 92, 190); text-decoration: underline; font-weight: bold;">RESEND
+                                    OTP</button>
+                            </div>
+                        </div>
+                        <button id="resendBtn" style="display: none;">Resend OTP</button> <!-- Initially hidden -->
+
+                        <script>
+                            // Function to start OTP timer
+                            function startOTPTimer(duration,display) {
+                                let timer = duration, minutes, seconds;
+                                const resendBtn = document.getElementById('resendBtn');
+                                const verifyBtn=document.getElementById('verify');
+                                const timerInterval = setInterval(function () {
+                                    minutes = parseInt(timer / 60, 10);
+                                    seconds = parseInt(timer % 60, 10);
+
+                                    minutes = minutes < 10 ? "0" + minutes : minutes;
+                                    seconds = seconds < 10 ? "0" + seconds : seconds;
+
+                                    display.textContent = minutes + ":" + seconds;
+
+                                    if (--timer < 0) {
+                                        timer = duration;
+                                        clearInterval(timerInterval); // Clear the timer interval
+                                        resendBtn.style.display = 'block'; // Show the resend button
+                                        verifyBtn.style.display='none';
+                                    }
+                                }, 1000);
+                            }
+
+                            // Initialize OTP timer (adjust duration as needed)
+                            window.onload = function () {
+                                const fiveMinutes = 60 * 1,
+                                    display = document.querySelector('#timer');
+                                startOTPTimer(fiveMinutes, display);
+                            };
+
+                            // Resend OTP button click event
+                            document.getElementById('resendBtn').addEventListener('click', function (event) {
+                                event.preventDefault();
+                                this.disabled = true;
+
+                                const email = '<%= email %>';
+                                // Make an AJAX request to resend OTP
+                                fetch('/resend_otp?email=' + email)
+                                    .then(response => {
+                                        if (!response.ok) {
+                                            throw new Error('Failed to resend OTP. Please try again.');
+                                        }
+                                        return response.json();
+                                    })
+                                    .then(data => {
+                                        if (data.success) {
+                                            if (data.success) {
+                                                // Use SweetAlert for success message
+                                                Swal.fire({
+                                                    icon: 'success',
+                                                    title: 'OTP resent successfully!',
+                                                    showConfirmButton: false,
+                                                    timer: 1500
+                                                });
+                                                // Reset the timer after successfully resending OTP
+                                                const verifyBtn=document.getElementById('verify');
+                                                verifyBtn.style.display='block';
+                                                const display = document.querySelector('#timer');
+                                                startOTPTimer(60 * 1, display);
+                                                // Reset timer to 1 minutes
+                                                const resendBtn = document.getElementById('resendBtn');
+
+                                                resendBtn.style.display = 'none';
+                                            } else {
+                                                // Use SweetAlert for failure message
+                                                Swal.fire({
+                                                    icon: 'error',
+                                                    title: 'Failed to resend OTP. Please try again.'
+                                                });
+                                            }
+                                        }})
+                                    .catch(error => {
+                                        console.error('Error:', error);
+                                        alert('An error occurred. Please try again.');
+                                    });
+                            });
+
+                        </script>
+
+
+
+
+                    </div>
+                </div>
+
+
+
+
+
+            </div>
+
+        </main>
+        <!-- End .main -->
+
+
+
+
+
+        <%- include('../users/userFooter.ejs') %>
+
+
+            <%- include('../layouts/footer.ejs') %><script>
+               ' <% if (message) { %>'
+                    Swal.fire({
+                        icon: 'success',
+                        title: '<%= message %>',
+                        showConfirmButton: true,
+                        timer: 2000
+                    });
+               ' <% } %>'
+           
+
+   </script>

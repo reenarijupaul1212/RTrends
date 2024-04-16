@@ -1,0 +1,158 @@
+  <!-- Breadcrumb Section Begin -->
+
+  <section class="breadcrumb-option">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="breadcrumb__text">
+
+                    <h2 class="text-center font-weight-bold" style="color: rgba(22, 22, 22, 0.751);">Admin
+                        Dashboard
+                    </h2>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+<main class="main my-5">
+    <div class="container">
+        <h2 class="text-center">Enter new coupon details</h2>
+        <form id="addCoupon" class="container col-lg-6 my-5">
+            <div class="form-outline mb-4">
+                <input type="text" id="product-name" class="form-control" name="code" required title="should be unique code" />
+                <span id="codeError" class="error"></span>
+                <label class="form-label mt-2" for="product-name">Coupon Code</label>
+            </div>
+            <div class="form-outline mb-4">
+                <input type="text" class="form-control" name="description" required />
+                <label class="form-label mt-2" for="groupingID">Description</label>
+            </div>
+           
+            <div class="form-outline mb-4">
+                <input type="number" id="rateOfDiscount" class="form-control" name="rateOfDiscount" required min="1" max="99" />
+                <span id="rateOfDiscountError" class="error"></span>
+                <label class="form-label mt-2" for="rateOfDiscount">Rate of Discount (1-99)</label>
+            </div>
+            
+            <div class="form-outline mb-4">
+                <input type="number" id="color" class="form-control" name="maximumDiscount" required />
+                <label class="form-label mt-2" for="color">Maximum Discount</label>
+            </div>
+            <div class="form-outline mb-4">
+                <input type="date" id="price" class="form-control" name="expirationDate" required />
+                <label class="form-label mt-2" for="price">Expiration Date</label>
+            </div>
+            <div>
+                <label class="d-block pb-3">Is Active</label>
+                <input type="radio" name="isActive" value="true" required />
+                <label>True</label>
+                <input type="radio" name="isActive" value="false" />
+                <label>False</label>
+            </div>
+            <!-- Submit button -->
+            <button type="submit" onsubmit="return validateForm()" class="btn btn-dark btn-block mb-4">Add Coupon</button>
+        </form>
+    </div>
+</main>
+<script src="/js/dataTables.js"></script>
+<script>
+   document.getElementById('addCoupon').addEventListener('submit', async function(event) {
+    event.preventDefault();
+
+    function validateForm() {
+        var codeInput = document.getElementById('codeInput').value.trim();
+        var descriptionInput = document.getElementById('descriptionInput').value.trim();
+        // Repeat for other input fields
+
+        var codeError = document.getElementById('codeError');
+        var descriptionError = document.getElementById('descriptionError');
+        // Add variables for other error placeholders
+
+        codeError.textContent = '';
+        descriptionError.textContent = '';
+        // Clear error messages for other fields
+
+        var isValid = true;
+
+        if (codeInput === '') {
+            codeError.textContent = 'Coupon code is required.';
+            isValid = false;
+        }
+
+        if (descriptionInput === '') {
+            descriptionError.textContent = 'Description is required.';
+            isValid = false;
+        }
+        if (isNaN(rateOfDiscountInput) || rateOfDiscountInput <= 0 || rateOfDiscountInput >= 100) { // Check if rateOfDiscountInput is not a number or outside valid range
+        rateOfDiscountError.textContent = 'Rate of Discount must be a number between 1 and 99.'; // Display error message
+        isValid = false;
+    }
+        // Add validation for other fields
+
+        return isValid;
+    }
+    
+    // Construct form data
+    const formData = {};
+    const formElements = event.target.elements;
+    for (let element of formElements) {
+        if (element.name && element.value.trim() !== '') { // Check if the input is not empty after trimming spaces
+            formData[element.name] = element.value.trim();
+            
+        } else if (element.required) { // Check if the input is required
+            // If the input is required and empty, display an error message
+            Swal.fire({
+                icon: 'error',
+                title: 'Error',
+                text: 'Please fill in all required fields.'
+            });
+            return; // Exit the function
+        }
+    }
+
+    try {
+
+        const response = await fetch('/admin/add-couponPage', {
+            method: 'post',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(formData)
+        });
+        const responseData = await response.json();
+        if (response.ok) {
+            Swal.fire({
+                icon: 'success',
+                title: 'Success',
+                text: responseData.message
+            });
+            // Optionally, reset the form after successful submission
+            event.target.reset();
+        } else {
+            Swal.fire({
+                icon: 'error',
+                title: 'Error',
+                text: responseData.message
+            });
+        }
+    } catch (error) {
+        // Check if the error is a duplicate key error
+        if (error.code === 11000) {
+            Swal.fire({
+                icon: 'error',
+                title: 'Duplicate Key Error',
+                text: 'The coupon code already exists. Please choose a different one.'
+            });
+        } else {
+            Swal.fire({
+                icon: 'error',
+                title: 'Error',
+                text: 'Failed to add new coupon due to server issues. Please try again later!'
+            });
+        }
+    }
+});
+
+
+</script>

@@ -1,0 +1,93 @@
+  <!-- Breadcrumb Section Begin -->
+
+  <section class="breadcrumb-option">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="breadcrumb__text">
+
+                    <h2 class="text-center font-weight-bold" style="color: rgba(22, 22, 22, 0.751);">Admin
+                        Dashboard
+                    </h2>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+<div class="container-fluid mt-5 mx-auto  " >
+    <h2>Edit Category</h2>
+    <form id="editCategoryForm" action="/admin/edit_category/<%= category._id %>" method="POST" class="class="mx-auto " >
+      <div class="mb-6 col-md-6">
+        <label for="name" class="form-label">Category Name</label>
+        <input type="text" class="form-control" id="name" name="name"  value="<%=category.name %>" required>
+      </div>
+      <div class="mb-3"></div>
+    
+         <div class="mb-6 col-md-6">
+            <label for="name" class="form-label">discountName</label>
+            <input type="text" class="form-control" id="discountName" name="discountName"  value="<%=category.discountName %>" required>
+          </div> 
+          <div class="mb-3"></div>
+          <div class="mb-6 col-md-6" >
+            <label for="name" class="form-label">discountAmount</label>
+            <input type="number" class="form-control" id="discountAmount" name="discountAmount"  value="<%=category.discountAmount %>" required>
+          </div>  
+          <div class="mb-3"></div>
+          <div class="mb-2 form-check">
+            <label class="form-check-label" for="active"> Status <input type="checkbox" id="status" name="status" <%= category.status ? 'checked' : '' %> value='true'></label>
+             </div>
+             <div class="mb-2 form-check">
+               <label class="form-check-label" for="onDiscount"> onDiscount <input type="checkbox" id="onDiscount" name="onDiscount" <%= category.onDiscount ? 'checked' : '' %> value='true'></label>
+                </div>
+      <button type="submit" class="btn btn-primary">Submit</button>
+    </form>
+    <% if (error) { %>
+      <div class="alert alert-danger" role="alert">
+          <%= error %>
+      </div>
+  <% } else if (success) { %>
+      <div class="alert alert-success" role="alert">
+          <%= success %>
+      </div>
+  <% } %>
+  
+  </div>
+  <script>
+    document.addEventListener("DOMContentLoaded", function() {
+        // Add an event listener to the form submit event
+        document.getElementById("editCategoryForm").addEventListener("submit", function(event) {
+            // Select all input and textarea elements within the form
+            const formInputs = this.querySelectorAll("input, textarea");
+            let isValid = true;
+
+            // Iterate over each input element
+            formInputs.forEach(function(input) {
+                // Trim the value of each input element
+                input.value = input.value.trim();
+
+                // Perform validation based on input type
+                switch (input.type) {
+                    case "text":
+                    case "textarea":
+                        // Check if the input value is empty
+                        if (input.value === "") {
+                            isValid = false;
+                            // Add a class to indicate invalid input
+                            input.classList.add("is-invalid");
+                        } else {
+                            // Remove any existing invalid class
+                            input.classList.remove("is-invalid");
+                        }
+                        break;
+                    // Add validation for other input types as needed
+                }
+            });
+
+            // Prevent form submission if validation fails
+            if (!isValid) {
+                event.preventDefault();
+            }
+        });
+    });
+</script>

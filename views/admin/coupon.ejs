@@ -1,0 +1,189 @@
+  <!-- Breadcrumb Section Begin -->
+
+  <section class="breadcrumb-option">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="breadcrumb__text">
+
+                    <h2 class="text-center font-weight-bold" style="color: rgba(22, 22, 22, 0.751);">Admin
+                        Dashboard
+                    </h2>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+<main class="main my-5">
+    <div class="container-lg">
+
+        <a class="btn btn-outline-success mb-3" href="/admin/add-couponPage">Add Coupon</a>
+
+        <div class="table-responsive" id="no-more-tables">
+            <table class="table table-striped bg-white" id="myTable">
+                <thead class=" ">
+                    <tr class="text-center">
+
+                        <th class="bg-dark text-white text-center" style="font-size: 15px ; width: 300px;"
+                            scope="col" class="sorting ">
+                            Code</th>
+
+                        <th class="bg-dark text-white text-center" style="font-size: 15px ; width: 400px"
+                            scope="col" class="sorting">
+                            Description</th>
+
+                        <th class="bg-dark text-white text-center" style="font-size: 15px ; width: 400px"
+                            scope="col" class="sorting">
+                            Rate of Discount</th>
+
+                        <th class="bg-dark text-white text-center" style="font-size: 15px ; width: 400px"
+                            scope="col" class="sorting">
+                            Max Discount</th>
+
+                        <th class="bg-dark text-white text-center" style="font-size: 15px ; width: 400px"
+                            scope="col" class="sorting">
+                            isActive</th>
+
+                        <th class="bg-dark text-white text-center" style="font-size: 15px ; width: 400px"
+                            scope="col" class="sorting">
+                            Expiry Date</th>
+
+
+
+                        <th class="bg-dark text-white text-center" style="font-size: 15px; width: 300px"
+                            scope="col">Actions
+                        </th>
+
+                    </tr>
+                </thead>
+                <tbody>
+
+                    <% if(coupons && coupons.length>0){ %>
+                        <% for(let i=0; i < coupons.length ;i++) { %>
+
+
+                            <tr row-id="<%= coupons[i]._id%>" class="" style="font-size: medium;">
+                                <td data-title="Name" style="width: 300px;">
+                                    <%= coupons[i].code %>
+                                </td>
+                                <td class="px-3" data-title="Email" style="width: 400px;">
+                                    <%= coupons[i].description %>
+                                </td>
+                                <td class="text-center" data-title="Email" style="width: 400px;">
+                                    <%= coupons[i].rateOfDiscount %>
+                                </td>
+                                <td class="text-center" data-title="Email" style="width: 400px;">
+                                    <%= coupons[i].maximumDiscount%>
+                                </td>
+                                <td class="text-center" data-title="Email" style="width: 400px;">
+                                    <%= coupons[i].isActive %>
+                                </td>
+                                <td data-title="Email" style="width: 400px;">
+
+                                    <% const options={ year: 'numeric' , month: 'short' , day: 'numeric' };
+                                        const shortDate=coupons[i].expirationDate.toLocaleDateString('en-US',
+                                        options); %>
+
+                                        <%=shortDate %>
+                                </td>
+
+
+
+                                <td>
+
+
+                                    <a class="btn btn-outline-success btn-sm"
+                                        href="/admin/edit-coupon/<%=coupons[i]._id %>"> Edit
+                                    </a>
+
+                                    
+                                        <% if (coupons[i].isActive) { %>
+                                            <a class="btn btn-outline-danger btn-sm" href="/admin/delete-coupon/<%=coupons[i]._id %>"
+                                                onclick="return confirm('Are you sure you want to delete this coupon?')"> Delete </a>
+                                        <% } %>
+
+                                </td>
+
+
+
+
+
+                            </tr>
+
+                            <% } %>
+                                <% } else { %>
+
+                                    <tr>
+
+                                        <td class="text-danger" colspan="5">Coupons Not Found</td>
+                                    </tr>
+
+                                    <% } %>
+
+
+
+
+
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <ul class="pagination">
+        <li id="prevBtn" class="page-item">
+        </li>
+        <a href="" class="page-link" onclick="prevPage()">Prev</a>
+        </li>
+        <li id="currentPage" class="page-item active">
+            <a class="">
+                <%= currentPage %>
+            </a>
+        </li>
+        <li id="nextBtn" class="page-item">
+            <a href="" class="page-link" onclick="nextPage()">Next</a>
+        </li>
+    </ul>
+</main>
+<script>
+    var currentPage = '<%= currentPage %>';
+var totalPage = '<%= totalPage %>'; // Replace with the actual total number of pages
+
+function prevPage() {
+  if (currentPage > 1) {
+      currentPage--;
+      updatePage();
+  }
+}
+
+function nextPage() {
+  if (currentPage < totalPage) {
+      currentPage++;
+      updatePage();
+  }
+}
+
+function updatePage() {
+  var currentPageElement = document.getElementById('currentPage');
+  currentPageElement.textContent = currentPage;
+
+  // Highlight the active page
+  var paginationItems = document.querySelectorAll('.pagination .page-item');
+  paginationItems.forEach(function(item) {
+      item.classList.remove('active');
+  });
+  currentPageElement.parentElement.classList.add('active');
+
+  // Disable Prev/Next buttons based on the current page
+  document.getElementById('prevBtn').classList.toggle('disabled', currentPage === 1);
+  document.getElementById('nextBtn').classList.toggle('disabled', currentPage === totalPage);
+
+  // Update URL
+  var newURL = window.location.pathname + '?page=' + currentPage;
+  window.history.pushState({ path: newURL }, '', newURL);
+
+  // Fetch new data or perform other actions based on the currentPage
+}
+</script>
+    <script src="/js/dataTables.js"></script>
+
+    <script src="/js/admin/categoryList.js"></script>

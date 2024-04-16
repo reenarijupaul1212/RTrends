@@ -1,0 +1,249 @@
+<%- include('../layouts/header.ejs') %>
+
+    <%- include('../users/userHeader.ejs') %>
+<!-- Breadcrumb Section Begin -->
+<section class="breadcrumb-option">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="breadcrumb__text">
+                    <h4>Shopping Cart</h4>
+                    <div class="breadcrumb__links">
+                        <a href="/">Home</a>
+                        <a href="/products_page">Shop</a>
+                        <span>Shopping Cart</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+<!-- Breadcrumb Section End -->
+
+<!-- Shopping Cart Section Begin -->
+<section class="shopping-cart spad">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8">
+                <div class="shopping__cart__table">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Product</th>
+                                <th>Quantity</th>
+                                <th>Total</th>
+                                <th></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <% if (cart && cart.items && cart.items.length > 0) { %>
+                                <% var totalPrice = 0; %>
+                                <% cart.items.forEach((item, index) => { %>
+                                    <% var totalQty = 0; %>
+                            <tr id="cartProduct<%= index %>">
+                                <td class="product__cart__item">
+                                    <% const productId = item.product.id %>
+                                    <% const productID = productId.replace(/['"]+/g, ''); %>
+                                    <div class="product__cart__item__pic">
+                                        <img style="max-width: 100px; max-height: 100px; width: auto; height: auto;" src="upload/products/<%= item.product.image %>" alt="">
+                                    </div>
+                                    <div class="product__cart__item__text">
+                                        <h6><%= item.product.name %></h6>
+                                        <% if (item.onOffer) { %>
+                                            <h5>₹<%= item.offerPrice %></h5>
+                                            <p class="original-price">Original Price: ₹<%= item.price %></p>
+
+                                        <% } else { %>
+                                            <h5>₹<%= item.price %></h5>
+                                        <% } %>
+                                        
+                                    </div>
+                                </td>
+                                <td class="quantity__item">
+                                    <div class="quantity" style="display: flex; align-items: center;">
+                                        <!-- Decrease quantity icon -->
+                                        <i class="fa fa-minus" style="margin-right: 5px;" onclick="updateDecQuantityOfCartItem('<%= item._id %>')"></i>
+                                        <!-- Quantity input -->
+                                        <input type="text" value="<%= item.quantity %>" style="width: 30px; text-align: center;">
+                                        <!-- Increase quantity icon -->
+                                        <i class="fa fa-plus" style="margin-left: 5px;" onclick="updateIncQuantityOfCartItem('<%= item._id %>')"></i>
+                                    </div>
+                                </td>
+                                
+                                <% totalQty = totalQty + item.quantity %>
+                                <td class="cart__price">₹<%= item.price * item.quantity %></td>
+                                <td class="cart__close"><i onclick="removeItem('<%= item._id %>')" class="fa fa-close"></i></td>
+                            </tr>
+                            <% totalPrice += item.offerPrice * item.quantity; %>
+                                        <% }); %>
+                                    <% } else { %>
+                                        <tr>
+                                            <td colspan="5">Your cart is empty</td>
+                                        </tr>
+                                    <% } %>
+                                    <tr>
+                                        <td colspan="5">
+                                             <!-- Display out of stock items and message -->
+                <% if (outOfStockItems && outOfStockItems.length > 0) { %>
+                    <div class="row mt-4">
+                        <div class="col-12">
+                            <h5 class="outOfStock">The following items are out of stock:</h5>
+                            <ul>
+                                <% outOfStockItems.forEach(item => { %>
+                                <li><%= item %></li>
+                                <% }); %>
+                            </ul>
+                        </div>
+                    </div>
+                    <% } %> 
+                                        </td>
+                                    </tr>
+                            
+                        </tbody>
+                    </table>
+                </div>
+                <div class="row">
+                    <div class="col-lg-6 col-md-6 col-sm-6">
+                        <div class="continue__btn">
+                            <a href="/">Continue Shopping</a>
+                        </div>
+                    </div>
+                    <div class="col-lg-6 col-md-6 col-sm-6">
+                        <div class="continue__btn update__btn">
+                            <a href="/cart"><i class="fa fa-spinner"></i> Update cart</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-4">
+                <div class="cart__discount">
+                    <h6>Discount codes</h6>
+                    <form action="#">
+                        <input type="text" placeholder="Coupon code">
+                        <button type="submit">Apply</button>
+                    </form>
+                </div>
+                <% if (cart && cart.items && cart.items.length > 0) { %>
+                <div class="cart__total">
+                    <% var totalPrice = 0;
+                    cart.items.forEach(item => {
+                    totalPrice += item.price * item.quantity;
+                    
+                                    }); 
+                                    totalPrice=totalPrice.toFixed(2);%>
+
+<% if (cart.items.length) { %>
+                    <h6>Cart total</h6>
+                    <ul>
+                        <li>Subtotal <span>₹<%= totalPrice %></span></li>
+                        <li>Total <span>₹<%= totalPrice %></span></li>
+                    </ul>
+                    <a onclick="proceedToBuy('<%= totalPrice %>')" class="primary-btn" style="color: white;" >Proceed to checkout</a>
+                </div>
+                <% } %>     <%}%>
+            </div>
+        </div>
+    </div>
+</section>
+<script src="js/jquery-3.3.1.min.js"></script>
+    <script src="js/bootstrap.min.js"></script>
+    <script src="js/jquery.nice-select.min.js"></script>
+    <script src="js/jquery.nicescroll.min.js"></script>
+    <script src="js/jquery.magnific-popup.min.js"></script>
+    <script src="js/jquery.countdown.min.js"></script>
+    <script src="js/jquery.slicknav.js"></script>
+    <script src="js/mixitup.min.js"></script>
+    <script src="js/owl.carousel.min.js"></script>
+    <script src="js/main.js"></script>
+    <script>
+        async function removeItem(itemId) {
+          try {
+              const response = await fetch(`/removeItemFromCart/${itemId}`, { method: 'DELETE' });
+              if (response.ok) {
+                  // Reload the page or update the cart content
+                  location.reload(); // Example: Reload the page to reflect changes
+              } else {
+                  console.error('Failed to remove item from cart.');
+              }
+          } catch (error) {
+              console.error('Error removing item from cart:', error);
+          }
+      }
+      
+      async function updateIncQuantityOfCartItem(itemid) {
+          try {
+              
+              const response = await fetch(`/updateIncQuantityOfCartItem/${itemid}`, { method: 'post' });
+              if (response.ok) {
+                  // Reload the page or update the cart content
+                  location.reload(); // Example: Reload the page to reflect changes
+              } else {
+                  console.error('Failed to increase item from cart.');
+              }
+          } catch (error) {
+              console.error('Error increase item to cart:', error);
+          }
+      }
+      
+      async function updateDecQuantityOfCartItem(itemid) {
+          try {
+              const response = await fetch(`/updateDecQuantityOfCartItem/${itemid}`, { method: 'post' });
+              if (response.ok) {
+                  // Reload the page or update the cart content
+                  location.reload(); // Example: Reload the page to reflect changes
+              } else {
+                  console.error('Failed to decrease item from cart.');
+              }
+          } catch (error) {
+              console.error('Error decrease item from cart:', error);
+          }
+      }
+      
+      //gotocheckout
+      function proceedToBuy(totalPrice) {
+          
+          fetch('/proceedToBuy', {
+              method: 'POST',
+              headers: {
+                  'Content-Type': 'application/json'
+              },
+              
+              body: JSON.stringify({ total: totalPrice})
+          })
+          .then(response => {
+              if (response.ok) {
+                  // Check if response is a redirect (status code 3xx)
+                  if (response.redirected) {
+                      // Get the redirected URL from the response
+                      const redirectedUrl = response.url;
+                      // Redirect the browser to the new URL
+                      window.location.href = redirectedUrl;
+                  } else {
+                      // Parse JSON response if not a redirect
+                      return response.json();
+                  }
+              } else {
+                  console.error('Error: Failed to proceed to buy');
+                  throw new Error('Failed to proceed to buy');
+              }
+          })
+          .then(data => {
+              if (data && data.redirectUrl) {
+                  // Redirect the browser to the URL specified in the response data
+                  window.location.href = data.redirectUrl;
+              } else {
+                  console.error('Error: Redirect URL not found in server response');
+              }
+          })
+          .catch(error => {
+              console.error('Error: ', error);
+          });
+      }
+      
+      
+      
+        </script>
+
+
+    <%- include('userFooter.ejs') %>
+    <%- include('../layouts/footer.ejs') %>

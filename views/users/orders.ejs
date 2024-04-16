@@ -1,0 +1,188 @@
+<%- include('../layouts/header.ejs') %>
+
+    <%- include('../users/userHeader.ejs') %>
+
+
+
+        <% orders.forEach(order=> { %>
+            <section class="gradient-custom" data-id="<%= order._id %>">
+                <div class="container py-3">
+                    <div class="row d-flex justify-content-center align-items-center">
+                        <div class="col-lg-12 col-xl-8">
+                            <div class="card" style="border-radius: 10px;">
+                                <div class="card-body p-4">
+                                    <div class="d-flex justify-content-between align-items-center mb-4 mx-3">
+                                        <p class="small text-muted mb-0 text-uppercase text-center col-12 col-lg-auto"
+                                            id="status" style="letter-spacing: .1rem;">Order Status: <%= order.status %>
+                                        </p>
+                                    </div>
+                                    <div class="card shadow-0 border mb-4">
+                                        <div class="card-body">
+                                            <% order.products.forEach(product=> { %>
+                                                <div class="row">
+                                                    <div class="col-md-2 d-flex justify-content-center">
+                                                        <img src="upload/products/<%= product.product.image %>"
+                                                            class="img-thumbnail" alt="Product Image"
+                                                            style="height: 100px; width: 85px; object-fit: contain;">
+                                                    </div>
+                                                    <div
+                                                        class="col-md-2 text-center d-flex justify-content-center align-items-center">
+                                                        <p class="text-muted mb-0">Product :<%= product.product.name %>
+                                                        </p>
+                                                    </div>
+                                                    <div
+                                                        class="col-md-2 text-center d-flex justify-content-center align-items-center">
+                                                        <p class="text-muted mb-0 small">Qty : <%= product.quantity %>
+                                                        </p>
+                                                    </div>
+                                                    <div
+                                                        class="col-md-2 text-center d-flex justify-content-center align-items-center">
+                                                        <p class="text-muted mb-0 small">Price : <%=
+                                                                product.product.offerPrice %>
+                                                        </p>
+                                                    </div>
+                                                    
+                                                </div>
+                                                <% }); %>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-md-12 text-right">
+                                                <% TotalDiscount=order.discountAmount + order.categoryDiscount %>
+                                                <p class="text-muted mb-2 small mr-5">Discount: <%= TotalDiscount
+                                                        %>
+                                                </p>
+                                                <p class="text-muted mb-2 small mr-5"><span
+                                                        class="total-label">Total:</span> <span class="total-amount">
+                                                        <%= order.finalPrice %>
+                                                    </span></p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="d-flex justify-content-between align-items-center mb-4 mx-3">
+                                        <p class="small text-muted mb-0 text-uppercase text-center col-12 col-lg-auto"
+                                            style="letter-spacing: .1rem;">Address: <%= order.shippingAddress %>
+                                        </p>
+                                    </div>
+                                    <div class="d-flex justify-content-between mx-4">
+                                        <button class="text-uppercase nav-link p-2"
+                                            style="letter-spacing: 2px; color: rgb(37, 120, 85); font-size: .8rem; ">
+                                            <a class="nav-link" style="font-weight: 600;"
+                                                href="/orderDetails/<%= order._id %>">Order DETAILS</a>
+                                        </button>
+                                        <% if (order.status==='pending' || order.status==='processing' ) { %>
+                                            <button type="button" class="cancelOrderBtn text-uppercase nav-link p-2"
+                                                onclick="openPopup('<%= order._id %>')"
+                                                style="letter-spacing: 2px; color: rgb(139, 39, 39); font-weight: 600; font-size: .8rem;">
+                                                <a class="nav-link" style="font-weight: 600;">Cancel Order</a>
+                                            </button>
+                                            <% } %>
+                                                <% if (order.status==='shipped' || order.status==='delivered' ) { %>
+                                                    <button type="button"
+                                                        class="cancelOrderBtn text-uppercase nav-link p-2"
+                                                        onclick="openPopup('<%= order._id %>')"
+                                                        style="letter-spacing: 2px; color: rgb(139, 39, 39); font-weight: 600; font-size: .8rem;">
+                                                        <a class="nav-link" style="font-weight: 600;">Return Order</a>
+                                                    </button>
+                                                    <% } %>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="popup-background" id="popupBackground">
+                    <div class="popup-container">
+                        <span class="close-btn" onclick="closePopup('<%= order._id %>')">X</span>
+                        <h2>Confirmation</h2>
+                        <p>Are you sure you want to cancel/return the order?</p>
+                        <input type="hidden" name="orderId" id="orderId">
+                        <textarea id="reason" rows="4" cols="50" name="confirmationReason"></textarea>
+                        <button onclick="confirmOrderStatusChange()">Confirm</button>
+                    </div>
+                </div>
+            </section>
+            <% }); %>
+
+                <%- include('../users/userFooter.ejs') %>
+
+
+                    <%- include('../layouts/footer.ejs') %>
+
+                        <style>
+                            /* Popup background styles */
+                            .popup-background {
+                                display: none;
+                                position: fixed;
+                                top: 0;
+                                left: 0;
+                                width: 100%;
+                                height: 100%;
+                                background-color: rgba(0, 0, 0, 0.5);
+                                /* Semi-transparent black background */
+                                z-index: 999;
+                                /* Ensure the popup is on top */
+                            }
+
+                            /* Popup container styles */
+                            .popup-container {
+                                position: fixed;
+                                top: 50%;
+                                left: 50%;
+                                transform: translate(-50%, -50%);
+                                background-color: white;
+                                padding: 20px;
+                                border-radius: 5px;
+                                box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.5);
+                                /* Box shadow for a better look */
+                            }
+
+                            /* Close button styles */
+                            .close-btn {
+                                position: absolute;
+                                top: 10px;
+                                right: 10px;
+                                cursor: pointer;
+                            }
+                        </style>
+                        <script>
+                            function openPopup(orderId) {
+                                // Display cancel confirmation form or modal
+                                document.getElementById('popupBackground').style.display = 'block'; // Fixed typo here
+                                // Set the orderId in the form (if needed)
+                                document.getElementById('orderId').value = orderId;
+                            }
+
+                            // Function to close the popup
+                            function closePopup() {
+
+                                document.getElementById('popupBackground').style.display = 'none';
+                            }
+
+                            //change orderstatus after entering details in popup confirm form
+                            function confirmOrderStatusChange() {
+                                // Get the confirmation reason from the textarea
+                                const confirmationReason = document.getElementById('reason').value;
+                                const orderId = document.getElementById('orderId').value;
+                                fetch(`/changeOrderStatus`, {
+                                    method: 'POST',
+                                    headers: {
+                                        'Content-Type': 'application/json'
+                                    },
+                                    body: JSON.stringify({ orderId, confirmationReason })
+                                })
+                                    .then(response => {
+                                        if (response.ok) {
+                                            // Handle success, maybe close the popup or refresh the page
+                                            closePopup();
+                                            window.location.reload(); // Refresh the page to reflect status change
+                                        } else {
+                                            // Handle errors
+                                            console.error('Failed to change order status');
+                                        }
+                                    })
+                                    .catch(error => {
+                                        console.error('Error:', error);
+                                        console.log(error);
+                                    });
+                            }
+                        </script>

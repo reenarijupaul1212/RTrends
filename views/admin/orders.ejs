@@ -1,0 +1,154 @@
+
+<section class="breadcrumb-option">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="breadcrumb__text">
+
+                    <h2 class="text-center font-weight-bold" style="color: rgba(22, 22, 22, 0.751);">Admin
+                        Dashboard
+                    </h2>
+                    <h4 >Orders</h4>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<div class="container mt-5">
+   
+    <table class="table">
+        <thead>
+            <tr>
+                <th>User</th>
+                <th>items</th>
+                <th>Payment Option</th>
+                <th>Status</th>
+                <th>Total Price</th>
+                <th>Action</th>
+            </tr>
+        </thead>
+        <tbody>
+            <% orders.forEach(order => { %>
+                <tr>
+                    <td><%= order.user?.name %></td>
+                    <td>
+                        <ul>
+                            <% order.products.forEach(product => { %>
+                                <li>
+                                    <strong>Name:</strong> <%= product.product.name %><br>
+                                    <strong>Price:</strong> <%= product.product.price %><br>
+                                    <strong>Quantity:</strong> <%= product.quantity %><br>
+                                </li>
+                            <% }); %>
+                        </ul>
+                    </td>
+                    <td><%= order.paymentOption %></td>
+                    <td><%= order.status %></td>
+                    <td>Rs<%= order.finalPrice %></td>
+                    <% if (order.status==='cancelled' || order.status==='pending' || order.status==='delivered'||order.status==='cancelled'|| order.status==='returned') {%>
+<td></td>
+                    <%}else if(order.status==='processing'|| order.status==='shipped' &&  order.clientOrderProcessingCompleted===true) {%>
+                        <td>
+                            <!-- Form to update order status -->
+                            <form action="/admin/update-status" method="post">
+                                <input type="hidden" name="orderId" value="<%= order._id %>">
+                                <div class="input-group">
+                                    <select class="form-select" name="newStatus">
+                                        <option value="">Change Status</option>
+                                        <% if (order.status==='processing'){%>
+                                        <option value="shipped">Shipped</option>
+                                        <%}else{%>
+                                        <option value="delivered">Delivered</option>
+                                        <%}%>
+                                    </select>
+                                    <button type="submit" class="btn btn-primary">Update Status</button>
+                                </div>
+                            </form>
+                        </td>
+                        <%}else {%>}    
+                    <td>
+                        <!-- Form to update order status -->
+                        <form action="/admin/update-status" method="post">
+                            <input type="hidden" name="orderId" value="<%= order._id %>">
+                            <div class="input-group">
+                                <select class="form-select" name="newStatus">
+                                    <option value="">Change Status</option>
+                                    <option value="shipped">Shipped</option>
+                                    <option value="delivered">Delivered</option>
+                                    
+                                </select>
+                                <button type="submit" class="btn btn-primary">Update Status</button>
+                            </div>
+                        </form>
+                    </td>
+                   <% }%>
+                </tr>
+            <% }); %>
+        </tbody>
+      
+    </table>
+   
+    <br>
+    
+    
+</div>
+
+<ul class="pagination">
+    <li id="prevBtn" class="page-item">
+    </li>
+    <a href="" class="page-link" onclick="prevPage()">Prev</a>
+    </li>
+    <li id="currentPage" class="page-item active">
+        <a class="">
+            <%= currentPage %>
+        </a>
+    </li>
+    <li id="nextBtn" class="page-item">
+        <a href="" class="page-link" onclick="nextPage()">Next</a>
+    </li>
+</ul>
+ <script>
+       var currentPage = '<%= currentPage %>';
+var totalPage = '<%= totalPage %>'; // Replace with the actual total number of pages
+
+function prevPage() {
+  if (currentPage > 1) {
+      currentPage--;
+      updatePage();
+  }
+}
+
+function nextPage() {
+  if (currentPage < totalPage) {
+      currentPage++;
+      updatePage();
+  }
+}
+
+function updatePage() {
+  var currentPageElement = document.getElementById('currentPage');
+  currentPageElement.textContent = currentPage;
+
+  // Highlight the active page
+  var paginationItems = document.querySelectorAll('.pagination .page-item');
+  paginationItems.forEach(function(item) {
+      item.classList.remove('active');
+  });
+  currentPageElement.parentElement.classList.add('active');
+
+  // Disable Prev/Next buttons based on the current page
+  document.getElementById('prevBtn').classList.toggle('disabled', currentPage === 1);
+  document.getElementById('nextBtn').classList.toggle('disabled', currentPage === totalPage);
+
+  // Update URL
+  var newURL = window.location.pathname + '?page=' + currentPage;
+  window.history.pushState({ path: newURL }, '', newURL);
+
+  // Fetch new data or perform other actions based on the currentPage
+}
+    </script>
+  
+
+<!-- Bootstrap Bundle with Popper -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>

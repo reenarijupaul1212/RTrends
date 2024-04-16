@@ -1,0 +1,499 @@
+<%- include('../layouts/header.ejs') %>
+
+    <%- include('../users/userHeader.ejs') %>
+    <!-- Breadcrumb Section Begin -->
+    <section class="breadcrumb-option">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="breadcrumb__text">
+                        <h4>Shop</h4>
+                        <div class="breadcrumb__links">
+                            <a href="/">Home</a>
+                            <span>Shop</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!-- Breadcrumb Section End -->
+
+    <!-- Shop Section Begin -->
+    <section class="shop spad">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-3">
+                    <div class="shop__sidebar">
+                        <div class="shop__sidebar__search">
+                            <form  id="searchBar">
+                                <input type="text" placeholder="Search..." id="search">
+                                <button type="submit"><span class="icon_search"></span></button>
+                            </form>
+                        </div>
+                        <div class="shop__sidebar__accordion">
+                            <div class="accordion" id="accordionExample">
+                                <div class="card">
+                                    <div class="card-heading">
+                                        <a data-toggle="collapse" data-target="#collapseOne">Categories</a>
+                                    </div>
+                                    <div id="collapseOne" class="collapse show" data-parent="#accordionExample">
+                                        <div class="card-body">
+                                            <div class="shop__sidebar__categories ">
+                                                <% if (categories && categories.length> 0) { %> 
+                                                <ul class="nice-scroll">
+
+                                                    <% categories.forEach(category => { %>
+                                                        <li><label><input class="category-checkbox" type="checkbox" id="category" name="category" value="<%= category._id %>"> <%= category.name%> (<%= category.count %>)</label></li>
+                                                    <% }); %>
+                                                
+                                                </ul>
+                                                <% } %> 
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="card">
+                                    <div class="card-heading">
+                                        <a data-toggle="collapse" data-target="#collapseTwo">Branding</a>
+                                    </div>
+                                    <div id="collapseTwo" class="collapse show" data-parent="#accordionExample">
+                                        <div class="card-body">
+                                            <div class="shop__sidebar__brand">
+                                                <% if (brands && brands.length> 0) { %> 
+                                                    <ul class="nice-scroll"> 
+                                                <ul> 
+                                                    <% brands.forEach(brand => { %>
+                                                        <li><label><input type="checkbox" class="brand-checkbox" id="brand" name="brand" value="<%= brand._id %>"> <%= brand.name%> (<%= brand.count %>)</label></li>
+                                                        <% }); %>
+                                                </ul>
+                                                
+                                                <% } %> 
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <!-- <div class="card">
+                                    <div class="card-heading">
+                                        <a data-toggle="collapse" data-target="#collapseThree">Filter Price</a>
+                                    </div>
+                                    <div id="collapseThree" class="collapse show" data-parent="#accordionExample">
+                                        <div class="card-body">
+                                            <div class="shop__sidebar__price">
+                                                <ul>
+                                                    <li><a href="#">$0.00 - $50.00</a></li>
+                                                    <li><a href="#">$50.00 - $100.00</a></li>
+                                                    <li><a href="#">$100.00 - $150.00</a></li>
+                                                    <li><a href="#">$150.00 - $200.00</a></li>
+                                                    <li><a href="#">$200.00 - $250.00</a></li>
+                                                    <li><a href="#">250.00+</a></li>
+                                                </ul>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="card">
+                                    <div class="card-heading">
+                                        <a data-toggle="collapse" data-target="#collapseFour">Size</a>
+                                    </div>
+                                    <div id="collapseFour" class="collapse show" data-parent="#accordionExample">
+                                        <div class="card-body">
+                                            <div class="shop__sidebar__size">
+                                                <label for="xs">xs
+                                                    <input type="radio" id="xs">
+                                                </label>
+                                                <label for="sm">s
+                                                    <input type="radio" id="sm">
+                                                </label>
+                                                <label for="md">m
+                                                    <input type="radio" id="md">
+                                                </label>
+                                                <label for="xl">xl
+                                                    <input type="radio" id="xl">
+                                                </label>
+                                                <label for="2xl">2xl
+                                                    <input type="radio" id="2xl">
+                                                </label>
+                                                <label for="xxl">xxl
+                                                    <input type="radio" id="xxl">
+                                                </label>
+                                                <label for="3xl">3xl
+                                                    <input type="radio" id="3xl">
+                                                </label>
+                                                <label for="4xl">4xl
+                                                    <input type="radio" id="4xl">
+                                                </label>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="card">
+                                    <div class="card-heading">
+                                        <a data-toggle="collapse" data-target="#collapseFive">Colors</a>
+                                    </div>
+                                    <div id="collapseFive" class="collapse show" data-parent="#accordionExample">
+                                        <div class="card-body">
+                                            <div class="shop__sidebar__color">
+                                                <label class="c-1" for="sp-1">
+                                                    <input type="radio" id="sp-1">
+                                                </label>
+                                                <label class="c-2" for="sp-2">
+                                                    <input type="radio" id="sp-2">
+                                                </label>
+                                                <label class="c-3" for="sp-3">
+                                                    <input type="radio" id="sp-3">
+                                                </label>
+                                                <label class="c-4" for="sp-4">
+                                                    <input type="radio" id="sp-4">
+                                                </label>
+                                                <label class="c-5" for="sp-5">
+                                                    <input type="radio" id="sp-5">
+                                                </label>
+                                                <label class="c-6" for="sp-6">
+                                                    <input type="radio" id="sp-6">
+                                                </label>
+                                                <label class="c-7" for="sp-7">
+                                                    <input type="radio" id="sp-7">
+                                                </label>
+                                                <label class="c-8" for="sp-8">
+                                                    <input type="radio" id="sp-8">
+                                                </label>
+                                                <label class="c-9" for="sp-9">
+                                                    <input type="radio" id="sp-9">
+                                                </label>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div> -->
+                                <div class="card">
+                                    <div class="card-heading">
+                                        <a data-toggle="collapse" data-target="#collapseSix">Tags</a>
+                                    </div>
+                                    <div id="collapseSix" class="collapse show" data-parent="#accordionExample">
+                                        <div class="card-body">
+                                            <div class="shop__sidebar__tags">
+                                                <a href="#">Product</a>
+                                              
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-8">
+                    <div class="shop__product__option">
+                        <div class="row">
+                            <div class="col-lg-6 col-md-6 col-sm-6">
+                                <div class="shop__product__option__left">
+                                    <p>Showing 1–3 of '<%=count%>' results</p>
+                                </div>
+                            </div>
+                            <div class="col-lg-6 col-md-6 col-sm-6">
+                                <div class="shop__product__option__right">
+                                    <p>Sort by Price:</p>
+                                    <select id="sortby">
+                                        <option value="lowPrice">Low To High</option>
+                                        <option value="highPrice">High TO Low</option>
+                                        
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        
+                        <% if(products && products.length>0){ %>
+                            <% for(let i=0; i < products.length ;i++) { %>
+                        <div class="col-lg-4 col-md-6 col-sm-6">
+                            <div class="product__item">
+                                <div class="product__item__pic set-bg" data-setbg="/upload/products/<%=products[i].image%>"style="background-size: cover;background-position: top;
+                                    background-repeat: no-repeat;">
+                                    <ul class="product__hover">
+                                        <li><a href=""onclick="addToWishlist('<%=products[i]._id%>')"><img src="img/icon/heart.png" alt=""></a></li>
+                                        <li><a href="#"><img src="img/icon/compare.png" alt=""> <span>Compare</span></a>
+                                        </li>
+                                        <li><a href="#"><img src="img/icon/search.png" alt=""></a></li>
+                                    </ul>
+                                </div>
+                                <div class="product__item__text">
+                                    <h6> <%=products[i].name%></h6>
+                                    <a href="/sproducts_page/<%=products[i]._id %>"class="add-cart">+ Add To Cart</a>
+                                    <div class="rating">
+                                        <i class="fa fa-star-o"></i>
+                                        <i class="fa fa-star-o"></i>
+                                        <i class="fa fa-star-o"></i>
+                                        <i class="fa fa-star-o"></i>
+                                        <i class="fa fa-star-o"></i>
+                                    </div>
+                                    <h5>  <span class="mr-3" <% if(products[i].onOffer && products[i].rateOfDiscount > 0) { %>style="color:grey;text-decoration: line-through;"<% } %>>
+                                        <% if(products[i].onOffer && products[i].rateOfDiscount > 0) { %>
+                                            ₹ <%=products[i].price%> <!-- Display discounted price -->
+                                        <% } else { %>
+                                            ₹ <%=products[i].price%> <!-- Display normal price -->
+                                        <% } %>
+                                    </span>
+
+
+
+
+                                    <% if(products[i].onOffer && products[i].rateOfDiscount>
+                                        0){ %>
+
+
+                                        ₹ <%=products[i].offerPrice%></h5>
+                                            <%}%>
+
+                                    <div class="product__color__select">
+                                        <label for="pc-4">
+                                            <input type="radio" id="pc-4">
+                                        </label>
+                                        <label class="active black" for="pc-5">
+                                            <input type="radio" id="pc-5">
+                                        </label>
+                                        <label class="grey" for="pc-6">
+                                            <input type="radio" id="pc-6">
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <% } } else{ %>
+
+                            <h3 class="text-danger"> Failed to load the products</h3>
+
+
+                            <% }%>
+                    </div>
+                    <div class="row">
+                        <div class="col-lg-12">
+                            <ul class="pagination">
+                                <li id="prevBtn" class="page-item">
+                                    <a   class="page-link">Prev</a>
+                                </li>
+                                <li id="currentPage" class="page-item">
+                                    <a class="page-link">
+                                        <%= currentPage %>
+                                    </a>
+                                </li>
+                                <li id="nextBtn" class="page-item">
+                                    <a  class="page-link">Next</a>
+                                </li>
+                            </ul>
+                            
+                        
+                            <script>
+                                  
+                            </script>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section> <script src="/js/user/products_page.js"></script>
+    <%- include('../layouts/footer.ejs') %>
+
+    <script>
+        window.addEventListener('DOMContentLoaded', (event) => {
+            // Get the id of the item from the URL hash
+            const itemId = window.location.hash.substr(1);
+    
+            // Find the item by its id
+            const item = document.getElementById(itemId);
+    
+            // If the item exists, add the highlight class
+            if (item) {
+                item.classList.add('highlight');
+            }
+        });
+    </script>
+    <!-- JavaScript function to handle adding to wishlist -->
+<script>
+    function addToWishlist(productId) {
+        fetch('/addToWishlist', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ productId })
+        })
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Failed to add product to wishlist');
+            }
+            return response.json();
+        })
+        .then(data => {
+            console.log(data); // Handle success response (optional)
+            alert('Product added to wishlist successfully');
+        })
+        .catch(error => {
+            console.error('Error adding product to wishlist:', error);
+            alert('Failed to add product to wishlist');
+        });
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+   
+</script>
+    Shop Section End
+    
+
+    <script>
+    document.addEventListener('DOMContentLoaded', () => {
+        // Function to extract URL parameters
+        function getUrlParams(url) {
+            const params = new URLSearchParams(url.search);
+            const filters = {};
+            params.forEach((value, key) => {
+                filters[key] = value;
+            });
+            return filters;
+        }
+    
+        // Function to update form elements based on URL parameters
+        function updateFormElements(filters) {
+            // Update search input
+            document.getElementById('search').value = filters.search || '';
+    
+            // Update checkboxes
+            const categoryCheckboxes = document.querySelectorAll('.category-checkbox');
+            const brandCheckboxes = document.querySelectorAll('.brand-checkbox');
+            categoryCheckboxes.forEach(checkbox => {
+                if (filters.category && filters.category.includes(checkbox.value)) {
+                    checkbox.checked = true;
+                }
+            });
+            brandCheckboxes.forEach(checkbox => {
+                if (filters.brand && filters.brand.includes(checkbox.value)) {
+                    checkbox.checked = true;
+                }
+            });
+    
+            // Update sorting select
+            if (filters.sortBy) {
+                document.getElementById('sortby').value = filters.sortBy;
+            }
+        }
+    
+        // Get current URL parameters
+        const currentUrl = new URL(window.location.href);
+        const urlFilters = getUrlParams(currentUrl);
+    
+        // Update form elements with URL parameters
+        updateFormElements(urlFilters);
+    
+        // Event listeners for form elements
+        document.getElementById('searchBar').addEventListener('submit', function(event) {
+            event.preventDefault(); // Prevent default form submission
+            updateFilters();
+        });
+    
+        const checkboxes = document.querySelectorAll('.category-checkbox, .brand-checkbox');
+        checkboxes.forEach(checkbox => {
+            checkbox.addEventListener('change', () => {
+                updateFilters();
+            });
+        });
+    
+        document.getElementById('sortby').addEventListener('change', function() {
+            updateFilters();
+        });
+    
+        // Pagination functionality
+        var currentPageElement = document.getElementById('currentPage').textContent;
+        var currentPage = parseInt(currentPageElement.textContent); // Get the current page number
+    
+        var totalPageElement = document.getElementById('totalPage');
+        var totalPage =Number('<%=totalPage%>');
+        var currentPage=Number('<%=currentPage%>');
+        // Event listeners for pagination buttons
+        document.getElementById('prevBtn').addEventListener('click', prevPage);
+        document.getElementById('nextBtn').addEventListener('click', nextPage);
+    
+        function prevPage() {
+            if (currentPage > 1) {
+                currentPage--;
+                updateFilters();
+                updatePage();
+            }
+        }
+    
+        function nextPage() {
+            if (currentPage < totalPage) {
+                currentPage++;
+                updateFilters();
+                updatePage();
+            }
+        }
+    
+        // Function to update URL based on form selections
+        function updateFilters() {
+            const selectedCategories = Array.from(document.querySelectorAll('.category-checkbox:checked')).map(cb => cb.value);
+            const selectedBrands = Array.from(document.querySelectorAll('.brand-checkbox:checked')).map(cb => cb.value);
+            const search = document.getElementById('search').value.trim();
+            const sortBy = document.getElementById('sortby').value;
+    
+            const queryParams = [];
+    
+            if (selectedCategories.length > 0) {
+                queryParams.push(`category=${selectedCategories.join(',')}`);
+            }
+    
+            if (selectedBrands.length > 0) {
+                queryParams.push(`brand=${selectedBrands.join(',')}`);
+            }
+    
+            if (search) {
+                queryParams.push(`search=${search}`);
+            }
+    
+            if (sortBy) {
+                queryParams.push(`sortBy=${sortBy}`);
+            }
+    
+            // Add the current page to queryParams
+            queryParams.push(`page=${currentPage}`);
+    
+            const newUrl = `${window.location.pathname}${queryParams.length > 0 ? '?' + queryParams.join('&') : ''}`;
+            window.history.pushState({ path: newUrl }, '', newUrl);
+    
+            // Reload the page with the updated URL
+            window.location.href = newUrl; // Uncomment this line if you want to reload the page
+        }
+    
+        function updatePage() {
+            currentPageElement.textContent = currentPage; // Update the current page number
+    
+            // Highlight the active page
+            var paginationItems = document.querySelectorAll('.pagination .page-item');
+            paginationItems.forEach(function(item) {
+                item.classList.remove('active');
+            });
+            currentPageElement.parentElement.classList.add('active');
+    
+            // Disable Prev/Next buttons based on the current page
+            document.getElementById('prevBtn').classList.toggle('disabled', currentPage === 1);
+            document.getElementById('nextBtn').classList.toggle('disabled', currentPage === totalPage);
+    
+            // Update URL with the current page
+            var newURL = window.location.pathname + '?page=' + currentPage;
+            window.history.pushState({ path: newURL }, '', newURL);
+    
+            // Fetch new data or perform other actions based on the currentPage
+        }
+    });
+
+
+    </script>

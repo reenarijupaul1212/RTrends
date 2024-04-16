@@ -1,0 +1,212 @@
+
+  <!-- Breadcrumb Section Begin -->
+
+  <section class="breadcrumb-option">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="breadcrumb__text">
+
+                    <h2 class="text-center font-weight-bold" style="color: rgba(22, 22, 22, 0.751);">Admin
+                        Dashboard
+                    </h2>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+<section class="user-section">
+    <div class="container">
+        <div class="row">
+            <div class="col-12">
+                <!-- Page title -->
+
+                <!-- Form START -->
+
+                <div class="row mb-5 gx-5">
+                    <!-- Contact detail -->
+                    <div class="col-xxl-8 mb-5 mb-xxl-0">
+                        <div class="bg-secondary-soft px-4 pt-5 pb-0 rounded">
+                            <div class="row g-3">
+                                <h3 class="mb-5 mt-5 text-center font-weight-bold "> Personal Details</h3>
+
+
+                                <form action="/edit_profile/<%=profil._id %>" method="post" enctype="multipart/form-data" class="row" id="editProfileForm">
+                                    <!-- First Name -->
+
+                                    <div class="d-flex justify-content-center flex-column align-items-center mb-4">
+
+                                        <label class="form-label">Profile Pic</label>
+                                        <img src="/upload/profile/<%= profil.profileImage %>" alt="profile Image" class="img-fluid">
+                                        <input id="imageInput" name="image" class="form-control w-75"
+                                            type="file" placeholder="select your profile pic" accept="image/*" required>
+
+
+                                    </div>
+
+                                    <div class="col-md-6">
+
+                                        <label class="form-label">First Name </label>
+
+                                        <input type="text" class="form-control" aria-label="First name"
+                                            name="firstName" value="<%= profil.name %>">
+                                    </div>
+                 
+                                    <!-- Phone number -->
+                                    <div class="col-md-6">
+                                        <label class="form-label">Phone number </label>
+                                        <input type="text" class="form-control" placeholder=""
+                                            aria-label="Phone number" name="phone" value="<%= profil.mobile %>">
+                                    </div>
+                                    <!-- Mobile number -->
+                                    
+                                    <!-- Email -->
+                                    <div class="col-md-6">
+                                        <label for="inputEmail4" class="form-label">Email </label>
+                                        <input readonly type="email" class="form-control" id="inputEmail4"
+                                            value="<%= user.email %>">
+                                    </div>
+                                   
+
+
+                                    <div class="mt-5 w-100 d-flex justify-content-center">
+
+                                        <!-- <button style="width: 40%;" class=" btn-dark p-1" type="submit">Edit
+                                            Profile</button> -->
+                                            
+
+                                    </div>
+
+                               
+                            </div>
+                        </div> <!-- Row END -->
+                    </div>
+                </div>
+
+
+                <!-- Form END -->
+            </div>
+        </div>
+    </div>
+
+    <div id="modal" style="position: absolute;top:0 ; z-index: 11; height: 100vh; width: 100vw; background-color: rgba(0, 0, 0, 0.479);" class="d-flex d-none justify-content-center align-items-center ">
+
+        <div class=" d-flex flex-column justify-content-center" style=" background-color: rgb(255, 255, 255); height: 450px ; width: 50%; ">
+
+            <div style="height: 80%;" class="  d-flex justify-content-center align-items-center ">
+
+                <img id="cropImg" style="height: 90% ;width:80%;" alt="">
+
+            </div>
+            <div class="d-flex  justify-content-center ">
+                <button id="cropBtn" class="nav-link mt-4 mb-4" style="background-color: black; color:whitesmoke ;padding :10px"> CROP THE IMG</button>
+
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="address-section" >
+    <div class="container">
+    <!-- Addresses section -->
+    <!-- <h2 class="mb-3">Addresses</h2> -->
+    <% add.forEach((address,index) => { %>
+    <!-- Display existing addresses -->
+    <div class="mb-3">
+        <label for="fullName_<%= index %>">Full Name:</label>
+        <input type="text" id="fullName_<%= index %>" name="fullName" value="<%= address.fullName %>" required>
+    </div>
+
+    <div class="mb-3">
+        <label for="houseName_<%= index %>">House Name:</label>
+        <input type="text" id="houseName_<%= index %>" name="houseName" value="<%= address.houseName %>" required>
+    </div>
+
+    <div class="mb-3">
+        <label for="email_<%= index %>">Email:</label>
+        <input type="email" id="email_<%= index %>" name="Aemail" value="<%= address.email %>" required>
+    </div>
+
+    <div class="mb-3">
+        <label for="mobile_<%= index %>">Mobile:</label>
+        <input type="tel" id="mobile_<%= index %>" name="Amobile" value="<%= address.mobile %>" required>
+    </div>
+
+    <div class="mb-3">
+        <label for="streetAddr_<%= index %>">Street Address:</label>
+        <input type="text" id="streetAddr_<%= index %>" name="streetAddr" value="<%= address.streetAddr %>" required>
+    </div>
+
+    <div class="mb-3">
+        <label for="city_<%= index %>">City:</label>
+        <input type="text" id="city_<%= index %>" name="city" value="<%= address.city %>" required>
+    </div>
+
+    <div class="mb-3">
+        <label for="state_<%= index %>">State:</label>
+        <input type="text" id="state_<%= index %>" name="state" value="<%= address.state %>" required>
+    </div>
+
+    <div class="mb-3">
+        <label for="country_<%= index %>">Country:</label>
+        <input type="text" id="country_<%= index %>" name="country" value="<%= address.country %>" required>
+    </div>
+
+    <div class="mb-3">
+        <label for="pincode_<%= index %>">Pincode:</label>
+        <input type="text" id="pincode_<%= index %>" name="pincode" value="<%= address.pincode %>" required>
+    </div>
+
+    <!-- Add other address fields as needed -->
+
+    <!-- Submit button for the form -->
+    <% }); %>
+</div>
+</form>
+    <!-- Include your address details here -->
+</section>
+
+
+<script>
+
+    document.addEventListener("DOMContentLoaded", function() {
+        // Add an event listener to the form submit event
+        document.getElementById("editProfileForm").addEventListener("submit", function(event) {
+            // Select all input and textarea elements within the form
+            const formInputs = this.querySelectorAll("input, textarea");
+            let isValid = true;
+
+            // Iterate over each input element
+            formInputs.forEach(function(input) {
+                // Trim the value of each input element
+                input.value = input.value.trim();
+
+                // Perform validation based on input type
+                switch (input.type) {
+                    case "text":
+                    case "textarea":
+                        // Check if the input value is empty
+                        if (input.value === "") {
+                            isValid = false;
+                            // Add a class to indicate invalid input
+                            input.classList.add("is-invalid");
+                        } else {
+                            // Remove any existing invalid class
+                            input.classList.remove("is-invalid");
+                        }
+                        break;
+                    // Add validation for other input types as needed
+                }
+            });
+
+            // Prevent form submission if validation fails
+            if (!isValid) {
+                event.preventDefault();
+            }
+        });
+    });
+
+
+
+</script>

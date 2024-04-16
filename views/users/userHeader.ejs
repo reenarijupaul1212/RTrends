@@ -1,0 +1,180 @@
+<!-- <div id="preloder">
+    <div class="loader"></div>
+</div> -->
+
+<!-- Offcanvas Menu Begin -->
+<div class="offcanvas-menu-overlay"></div>
+<div class="offcanvas-menu-wrapper">
+    <div class="offcanvas__option">
+
+        <div class="">
+            <% if(user) { %>
+
+                <a class="font-weight-bolder text-dark" href="/profile">Profile</a>
+                <%} else {%>
+                    <a class="font-weight-bolder text-dark" href="/login">Login</a>
+
+                    <% } %>
+
+
+
+        </div>
+
+
+    </div>
+    <div class="offcanvas__nav__option">
+        <a href="/search"><img src="/img/icon/search.png" alt=""></a>
+        <a href=""><img src="/img/icon/heart.png" alt=""></a>
+         <% if(user) { %>
+                            
+                            
+                                <a class="dropdown-toggle" href="#" role="button" id="userDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+                                    <img src="/img/icon/user.png" alt="">
+                                </a>
+                                <ul class="dropdown-menu" aria-labelledby="userDropdown">
+                                    <li><a class="dropdown-item" href="/profile">Profile</a></li>
+                                    <li><a class="dropdown-item" href="/logout">Logout</a></li>
+                                </ul>
+                            
+                           
+                            
+                            <%} else {%>
+                                <a class="font-weight-bolder text-dark" href="/login">Login</a>
+
+                                <% } %>
+
+    </div>
+    
+    <div id="mobile-menu-wrap"></div>
+    <div class="offcanvas__text">
+        <p></p>
+    </div>
+</div>
+<!-- Offcanvas Menu End -->
+
+<!-- Header Section Begin -->
+<header class="header">
+    <div class="header__top">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-6 col-md-7">
+                    <div class="header__top__left">
+
+                    </div>
+                </div>
+                <div class="col-lg-6 col-md-5">
+                    <div class="header__top__right">
+                        <div class="header__top__links">
+
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class=" container-fluid">
+        <div class="row">
+            <div class="col-lg-3 col-md-3">
+                <div class="header__logo">
+                    <a href="/"><img src="/img/logo.png" alt=""></a>
+                </div>
+            </div>
+            <div class="col-lg-6 col-md-6">
+                <nav class="header__menu mobile-menu">
+                    <ul>
+                        <li><a href="/">Home </a></li>
+                        <li><a href="/product">shop</a></li>
+                        <% if(user) { %>
+                        <li><a href="/orders">Orders</a></li>
+                      <%} %>                 
+                    </ul>
+                </nav>
+            </div>
+            <div class="col-lg-3 col-md-3">
+                <div class="header__nav__option ">
+
+                    <div style="padding-top: 3px;">
+
+                        <a href="/products_page/#searchBar"><img src="/img/icon/search.png" alt=""></a>
+
+                        <a href="/wishlist "><img src="/img/icon/heart.png" alt=""></a>
+
+                        <a href="/cart"><img src="/img/icon/cart.png" alt=""></a>
+
+                        <%if(user){%>
+                            <a href="/wallet"><img src="/img/wallet.png" alt=""></a>  
+                       <% }%>
+                        <% if(user) { %>
+                            
+                            
+                                <a class="dropdown-toggle" href="#" role="button" id="userDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+                                    <img src="/img/icon/user.png" alt="">
+                                </a>
+                                <ul class="dropdown-menu" aria-labelledby="userDropdown">
+                                    <li><a class="dropdown-item" href="/profile">Profile</a></li>
+                                    <li><a class="dropdown-item" href="/logout">Logout</a></li>
+                                </ul>
+                            
+                           
+                            
+                            <%} else {%>
+                                <a class="font-weight-bolder text-dark" href="/login">Login</a>
+
+                                <% } %>
+
+                    </div>
+
+
+                </div>
+            </div>
+        </div>
+        <div class="canvas__open"><i class="fa fa-bars"></i></div>
+    </div>
+</header>
+<!-- Header Section End -->
+
+<% if (message && message.error ) { %>
+    <div class="container alert alert-dismissible fade show alert-danger" role="alert">
+        <button class="btn-close" type="button" data-bs-dismiss='alert' aria-label="close"></button>
+        <strong class="container">
+            
+            <%= message.error %>
+            
+        </strong>
+    </div>
+<% } else if (message && message.success) { %>
+    <div class="container alert alert-dismissible fade show alert-success" role="alert">
+        <button class="btn-close" type="button" data-bs-dismiss='alert' aria-label="close"></button>
+        <strong class="container">
+            <%= message.success %>
+        </strong>
+    </div>
+<% } %>
+
+
+
+
+        <div hidden id="notification-message" class="container notification ">
+
+            <p id="messageLine"> </p>
+
+            <button class="close" id="notificationClose"><i class="fa-solid fa-xmark"
+                    style="color: #d2cfce;"></i></button>
+
+        </div>
+        <script>
+  window.addEventListener('scroll', function() {
+    var header = document.querySelector('.header'); // Adjust the selector if needed
+    var sticky = header.offsetTop;
+
+    console.log("Scrolling...");
+
+    if (window.pageYOffset > sticky) {
+        header.classList.add('sticky');
+    } else {
+        header.classList.remove('sticky');
+    }
+});
+
+        </script>

@@ -1,0 +1,180 @@
+<%- include('../layouts/header.ejs') %>
+
+    <%- include('../users/userHeader.ejs') %>
+       
+        <section class="container sproduct">
+            <div class="row">
+                <div class="col-lg-5 col-md-12 col-12" style="max-height: 400px; overflow: hidden; display: flex;">
+                    <div class="small-images-col" style="flex: 1;">
+                        <% if (product) { %>
+                        <% var productId= product._id %>
+                        <div class="small-images-row">
+                            <% for (let i = 0; i < product.images.length; i++) { %>
+                            <div class="small-img-col" style="margin-bottom: 10px;"> <!-- Add margin to create space between rows -->
+                                <img src="/upload/products/<%= product.images[i] %>" 
+                                     class="small-img" 
+                                     alt="img<%= i + 1 %>">
+                            </div>
+                            <% } %>
+                        </div>
+                        <% } else { %>
+                        <p>No product found</p>
+                        <% } %>
+                    </div>
+                    <div class="large-image-col" style="flex: 2; position: relative;">
+                        <% if (product) { %>
+                        <img class="img-fluid w-100 pb-1 zoo-item" 
+                             src="/upload/products/<%= product.image %>" 
+                             id="mainimg" 
+                             alt="<%= product.name %>"
+                             onmousemove="zoomImage(event)">
+                        <% } else { %>
+                        <p>No product found</p>
+                        <% } %>
+                    </div>
+                </div>
+            
+            
+                
+                
+                
+                <div class="col-lg-6 col-md-12 col-12">
+                    <h3 class="py-4"><%= product.name %></h3>
+                    <h2>INR <%= product.offerPrice %></h2>
+                    <select class="my-3" style="display: block; padding: 5px 10px;">
+                        <option>Select Size</option>
+                        <option value="">XL</option>
+                        <option value="">XXL</option>
+                        <option value="">Small</option>
+                        <option value="">Large</option>
+                    </select>
+                    <input type="number" id="editqty" onchange="updateItemQty()" value="1" min="1" style="width: 50px; height: 40px; padding-left: 10px; font-size: 16px; margin-right: 10px;">
+                    <button type="submit" class=" primary-btn" onclick="addToCart()">Add To Cart</button>
+                    <h4 class="mt-5 mb-5"> Product Details</h4>
+                    <span>
+                        <%= product.description %>
+                    </span>
+                </div>
+            </div>
+        </section>
+<script>
+/*zoom large imge */
+ 
+function zoomImage(event) {
+    const img = event.target;
+    const x = event.offsetX / img.offsetWidth * 100;
+    const y = event.offsetY / img.offsetHeight * 100;
+    img.style.transformOrigin = `${x}% ${y}%`; // Set transform origin based on cursor position
+    img.style.transform = 'scale(2)'; // Adjust scale factor as needed
+}
+
+function resetZoom(event) {
+    const img = event.target;
+    img.style.transform = 'none'; // Reset transform to its original state
+}
+
+// Attach event listeners
+const largeImage = document.getElementById('mainimg');
+largeImage.addEventListener('mousemove', zoomImage);
+largeImage.addEventListener('mouseleave', resetZoom);
+
+
+
+
+
+
+/*end zoom main image */
+
+            var MainImg = document.getElementById("mainimg");
+            var smallimg = document.getElementsByClassName("small-img");
+            for (var i = 0; i < smallimg.length; i++) {
+                smallimg[i].onclick = function() {
+                    MainImg.src = this.src; // Use "this" to refer to the clicked small image
+                };
+            }
+              document.addEventListener("DOMContentLoaded", function () {
+                var MainImg = document.getElementById("mainimg");
+                var smallimg = document.getElementsByClassName("small-img");
+            
+                for (var i = 0; i < smallimg.length; i++) {
+                  smallimg[i].addEventListener("click", function () {
+                    MainImg.src = this.src;
+                  });
+                }
+            });
+               
+            
+            function addToCart(id) {
+                    
+               var productId = "<%= productId %>"; /* obtain or set the product ID */;
+               
+                  var selectedSize = document.querySelector(".my-3").value;
+                  var quantity = document.querySelector("input[type=number]").value;
+            
+                  fetch("/addToCart", {
+                    method: "POST",
+                    headers: {
+                      "Content-Type": "application/json",
+                    },
+                    body: JSON.stringify({ productId, size: selectedSize, quantity }),
+                  })
+                  .then((response) => {
+                    // Check if the response is a redirect
+                    if (response.redirected) {
+                        // Handle the redirect manually
+                        window.location.href = response.url;
+                    } else {
+                        // If not redirected, handle the response as usual
+                        return response.json();
+                    }
+                })
+                    .then((data) => {
+                      alert(data.message);
+                    })
+                    .catch((error) => {
+                        
+                      console.error("Error adding to cart:", error);
+                      
+                    });
+                }
+             
+            </script>
+            
+            
+            
+            
+            <!-- Starting the ZooMove -->
+            <script>
+                $('.zoo-item').ZooMove();
+             </script>
+            <!-- jQuery CDN JS minified (must) -->
+            <script src="https://code.jquery.com/jquery-2.1.4.min.js"></script>
+            
+            <!-- ZooMove JS minified -->
+            <script src="dist/zoomove.min.js"></script>
+            <script>
+                document.addEventListener("DOMContentLoaded", function() {
+                    $('.zoo-item').ZooMove();
+                    
+                    var MainImg = document.getElementById("mainimg");
+                    var smallimg = document.getElementsByClassName("small-img");
+            
+                    for (var i = 0; i < smallimg.length; i++) {
+                        smallimg[i].addEventListener("click", function() {
+                            MainImg.src = this.src;
+                        });
+                    }
+                });
+            </script>
+            <!-- Starting the ZooMove -->
+            <script src="https://code.jquery.com/jquery-2.1.4.min.js"></script>
+            <!-- ZooMove JS minified -->
+            <script src="dist/zoomove.min.js"></script>
+
+
+
+        <%- include('../users/userFooter.ejs') %>
+
+          
+
+            <%- include('../layouts/footer.ejs') %>

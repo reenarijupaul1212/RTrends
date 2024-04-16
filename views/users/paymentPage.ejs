@@ -1,0 +1,305 @@
+<%- include('../layouts/header.ejs') %>
+
+    <%- include('../users/userHeader.ejs') %>
+
+
+        <!-- Breadcrumb Section Begin -->
+        <section class="breadcrumb-option">
+            <div class="container">
+                <div class="row">
+                    <div class="col-lg-12">
+                        <div class="breadcrumb__text">
+                            <h4>Payment Page</h4>
+                            <div class="breadcrumb__links">
+                                <a href="/">Home</a>
+                                <span>Payment Page</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <!-- Breadcrumb Section End -->
+
+        <!-- Checkout Section Begin -->
+        <section class="checkout spad p-0">
+            <div class="container">
+
+
+                <div class="row ">
+
+                    <h1 class="text-center my-5 font-weight-bold">YOUR ORDER SUMMARY </h1>
+
+                    <div class="col-lg-12 col-md-12 h-auto">
+
+
+                        <div class="checkout__order m-3">
+
+                            <h4 class="order__title">Delivery Details</h4>
+
+                            <div class="mt-4 font-weight-bold" style="
+                            background-color: #ffffff;
+                            
+                         padding: 1rem;">
+
+
+                                <P class=" mb-0">
+                                    <%= orderData.user.username %>
+                                </P>
+
+
+
+
+
+                                <p class=" mb-0">
+                                    <%=orderData.shippingAddress%>
+                                </p>
+                                <p class=" mb-0">
+                                    
+                                </p>
+                                <p class=" mb-0">
+                                    
+                                </p>
+                                <p class=" mb-0">
+                                    
+                                </p>
+                                <p class=" mb-0">
+                                    
+                                </p>
+                                <p class=" mb-0">
+                                    Pincode:
+                                    
+                                </p>
+                                <p class=" mb-0">
+                                    phone:
+                                   
+                                </p>
+
+
+
+
+
+
+
+                            </div>
+
+
+
+                        </div>
+
+
+                    </div>
+
+
+
+                    <div class="col-lg-12 col-md-12">
+                        <div class="checkout__order m-3 ">
+                            <h4 class="order__title">Product Detail</h4>
+                            <div class="checkout__order__products">Product <span>Total</span></div>
+                            <ul class="checkout__total__products">
+
+
+
+
+                             
+                                <% orderData.products.forEach((product, index) => { %>
+                                    <li>
+                                        <div class="d-flex justify-content-between">
+                                            <div><%= index + 1 %>. <%= product.product.name %> (<%= product.quantity %>)</div>
+                                            <div><%= product.price.toFixed(2)  %></div>
+                                        </div>
+                                    </li>
+                                <% }); %>
+                                           
+
+
+
+
+
+                            </ul>
+                            <ul class="checkout__total__all">
+
+                                <li>Gross Total <span>Rs.<%=orderData.grossTotal.toFixed(2)  %></span></li>
+
+
+                                <li>Coupon Discount <span>- <%=orderData.discountAmount.toFixed(2) %></span></li>
+
+
+
+
+                                        <li>
+                                            categoryOffers<span>-
+                                                    <%=orderData.categoryDiscount.toFixed(2) %>
+                                                </span>
+                                        </li>
+
+                                       
+
+
+                            </ul>
+
+
+                            <ul class="checkout__total__all">
+
+                                <li>Final Price <span>Rs.<%=orderData.finalPrice.toFixed(2)  %></span></li>
+
+
+                            </ul>
+
+                            <p>Payment Method : <span class="text-uppercase">
+                                    <%=orderData.paymentOption %>
+                                </span>
+                            </p>
+
+
+                            <% if(orderData.paymentOption==='COD' && orderData.finalPrice<1000 ) { %>
+                                <div class=" w-100 d-flex justify-content-center mt-4">
+                                    <button id="codOrderPlacement" order-id="<%=orderData._id %>"
+                                        style="font-size: 1.1rem;" class="nav-link bg-dark text-white px-4 py-2">PLACE
+                                        ORDER</button>
+                                </div>
+
+                                <%}else if(orderData.paymentOption==='COD' && orderData.finalPrice>1000 ) {%>
+                                    <p>Order : <span class="text-uppercase">
+                                        <%=orderData.paymentOption %>
+                                    </span>
+                                </p>
+                                    <div class=" w-100 d-flex justify-content-center mt-4"></div>
+                                    <button id="codOrderPlacement" 
+                                        style="font-size: 1.1rem;" class="nav-link bg-dark text-white px-4 py-2">Cart Page
+                                        </button>
+                                    </div>
+
+                                    <%}%>
+                                    <% if(orderData.paymentOption==='RazorPay' ) { %>
+                                        <div class=" w-100 d-flex justify-content-center mt-4">
+                                            <button id="payButton" order-id="<%=orderData._id %>"
+                                                style="font-size: 1.1rem;"
+                                                class="nav-link bg-dark text-white px-4 py-2"> RazorPay AND PLACE
+                                                ORDER</button>
+                                        </div>
+
+                                        <%}%>
+
+
+
+
+
+
+                        </div>
+                    </div>
+                </div>
+
+
+
+
+            </div>
+
+        </section>
+        <!-- Checkout Section End -->
+
+
+
+        <%- include('../users/userFooter.ejs') %>
+
+            <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+
+            <script src="/js/user/placeOrder.js"></script>
+            <script src="/js/user/razorpay.js"></script>
+
+
+            <%- include('../layouts/footer.ejs') %>
+            <!-- <script>
+            fetch('/placeOrder', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(formData)
+            })
+            .then(response => {
+                if (response.ok) {
+                    return response.json();
+                }
+                throw new Error('Network response was not ok.');
+            })
+            .then(data => {
+                alert(data);
+                console.log('responsedata', data);
+                if (data.success) {
+                    if (data.razorpayOrder) {
+                        // If payment option is RazorPay, initiate Razorpay paymentr
+                        var orderid=data.order._id;
+                        initiateRazorpayPayment(data.razorpayOrder.id, data.order.totalPrice, data.order.shippingAddress);
+                    } else {
+                        // Proceed with other payment methods
+                        alert('Order placed successfully');
+                        window.location.href = '/orders';
+                    }
+                } else {
+                    // Handle server response indicating failure
+                    alert('There was an error processing your order. Please try again later.');
+                }
+            })
+            .catch(error => {
+                console.error('There was a problem with the fetch operation:', error);
+                alert('There was an error processing your order. Please try again later yyyyyyyyyyyy.');
+            });
+            
+            
+            // Function to initiate Razorpay payment
+            function initiateRazorpayPayment(orderId, amount, address) {
+                var options = {
+                    key: 'rzp_test_z0qARFiG7IOgrd',
+                    amount: amount, // Amount in paise
+                    currency: 'INR',
+                    name: 'RTrends',
+                    description: 'Order Payment',
+                    order_id: orderId,
+                    handler: function(response) {
+                        // Handle successful payment response
+                        alert('Payment successful!');
+                        fetch('/paymentSuccess',{
+                            method: 'POST',
+                                        headers: { 'Content-Type': 'application/json' },
+                                        body: JSON.stringify({response }), 
+            
+                        })
+                        .then(respons=>{
+                            if(!respons.success){
+                                alert('There was an error processing your order. Please try again later haiiiiii.');   
+                            }
+                        
+                        console.log(respons);
+                        // Redirect or perform any action after successful payment
+                        window.location.href = '/orders';
+                    } )
+                    },
+                    prefill: {
+                        name: address.fullName,
+                        email: address.email,
+                        contact: address.mobile
+                    },
+                    notes: {
+                        address: 'Customer Address'
+                    },
+                    theme: {
+                        color: '#F37254'
+                    }
+                };
+                var rzp = new Razorpay(options);
+                rzp.on('payment.failed', function (response) {
+                    // Handle payment failure
+                    alert('Payment failed!');
+                    console.log(response.error.code);
+                    console.log(response.error.description);
+                    console.log(response.error.source);
+                    console.log(response.error.step);
+                    console.log(response.error.reason);
+                    console.log(response.error.metadata.order_id);
+                    console.log(response.error.metadata.payment_id);
+                });
+                rzp.open();
+            }
+            </script>
+             -->

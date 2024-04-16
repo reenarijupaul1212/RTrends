@@ -1,0 +1,111 @@
+  <!-- Breadcrumb Section Begin -->
+
+  <section class="breadcrumb-option">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="breadcrumb__text">
+                    <h2 class="text-center font-weight-bold" style="color: rgba(22, 22, 22, 0.751);">Admin
+                        Dashboard
+                    </h2>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+<main class="main my-5">
+    <div class="container">
+        <h2 class="text-center">Edit Coupon Details</h2>
+        <form class="container w-50 my-5" onsubmit="return validateForm(event)" action="/admin/edit-coupon/<%= coupon._id %>" method="post"  id="editCouponForm" coupon-id="<%=coupon._id%>">
+            <div class="form-outline mb-4">
+                <input type="text" id="product-name" class="form-control" name="code" required
+                    title="should be unique code " value="<%=coupon.code%>" />
+                    <span id="codeError" class="error"></span>
+                <label class="form-label mt-2" for="product-name">Coupon Code </label>
+            </div>
+            <div class="form-outline mb-4">
+                <input type="text" class="form-control" name="description" required
+                    value="<%=coupon.description%>" />
+                <label class="form-label mt-2" for="groupingID">Description </label>
+            </div>
+            <div class="form-outline mb-4">
+                <input type="number" id="size" class="form-control" name="rateOfDiscount" required min="1" max="99"
+                    value="<%=coupon.rateOfDiscount%>" />
+                <label class="form-label mt-2" for="size">Rate of Discount</label>
+            </div>
+            <div class="form-outline mb-4">
+                <input type="number" id="color" class="form-control" name="maximumDiscount" required
+                    value="<%=coupon.maximumDiscount%>" />
+                <label class="form-label mt-2" for="color">Maximum Discount</label>
+            </div>
+            <div class="form-outline mb-4">
+                <% const options={ day: '2-digit' , month: '2-digit' , year: 'numeric' }; %>
+                <% const shortDate=coupon.expirationDate.toLocaleDateString('en-IN', options); %>
+                <% const parts=shortDate.split('/'); %>
+                <% const yyyy=parts[2]; %>
+                <% const mm=parts[1]; %>
+                <% const dd=parts[0]; %>
+                <% const formattedDate=`${yyyy}-${mm}-${dd}`; %>
+                <input type="date" id="price" class="form-control" name="expirationDate" required
+                    value="<%=formattedDate %>" />
+                <label class="form-label mt-2" for="price">Expiration Date</label>
+            </div>
+            <div>
+                <label class="d-block pb-3">Is Active</label>
+
+                <input type="radio" name="isActive" id="isActiveTrue" value="true" <%= coupon.isActive === true ? 'checked' : '' %>>
+                <label for="isActiveTrue">True</label>
+                
+                <input type="radio" name="isActive" id="isActiveFalse" value="false" <%= coupon.isActive === false? 'checked' : '' %>>
+                <label for="isActiveFalse">False</label>
+                
+            </div>
+            <!-- Submit button -->
+            <button type="submit" class="btn btn-dark btn-block mb-4"> Edit Coupon</button>
+        </form>
+    </div>
+</main>
+
+<!-- Include SweetAlert CDN link in your HTML file -->
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+
+
+
+<!-- Include SweetAlert CDN link in your HTML file -->
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+
+<!-- Include SweetAlert CDN link in your HTML file -->
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+<script>
+    function validateForm(event) {
+        // Prevent form submission
+        event.preventDefault();
+
+        const formData = {};
+        const formElements = event.target.elements;
+
+        for (let element of formElements) {
+            if (element.name && element.value.trim() !== '') { // Check if the input is not empty after trimming spaces
+                formData[element.name] = element.value.trim();
+            } else if (element.required) { // Check if the input is required
+                // If the input is required and empty, display an error message
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Error',
+                    text: 'Please fill in all required fields.'
+                });
+                return; // Exit the function
+            }
+        }
+
+        // If all required fields are filled, proceed with form submission
+        document.getElementById('editCouponForm').submit();
+    }
+</script>
+
+
+
+
