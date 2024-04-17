@@ -40,7 +40,11 @@
                 
                 <div class="col-lg-6 col-md-12 col-12">
                     <h3 class="py-4"><%= product.name %></h3>
-                    <h2>INR <%= product.offerPrice %></h2>
+                    <h2>INR <% if (product.offerPrice !== 0) { %>
+                         <%= product.offerPrice %>
+                    <% } else { %>
+                         <%= product.price %>
+                    <% } %></h2>
                     <select class="my-3" style="display: block; padding: 5px 10px;">
                         <option>Select Size</option>
                         <option value="">XL</option>

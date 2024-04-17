@@ -187,8 +187,12 @@ module.exports = {
 
             } else {
                 // If the item is not in the cart, create a new cart item
-
-                const productPrice = product.offerPrice; // Replace with the actual way to get the product price
+                 if (product.offerPrice == 0) { 
+                    var productPrice = product.price;
+                 } else {
+                    var productPrice = product.offerPrice;
+                 }   
+                // Replace with the actual way to get the product price
                 const newCartItem = new CartItem({
                     cartID: userCart._id,
                     product: productId,

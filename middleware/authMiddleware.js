@@ -13,7 +13,7 @@ const isAuthenticated = (req, res, next) => {
 
 const isUserAuthenticated = (req, res, next) => {
     // Passport adds the "isAuthenticated" method to the request object
-    if (req.isAuthenticated() && req.user.role=='user') {
+    if (req.isAuthenticated() && req.user.role=='user'&& req.user.userStatus==true ) {
       // If the user is authenticated, redirect them to the dashboard or another pageconsole.log("hai");
     
       return next()
@@ -21,7 +21,14 @@ const isUserAuthenticated = (req, res, next) => {
     }
     // If not authenticated, allow them to proceed to the next middleware
     console.log('not loginannnnnnnnnnnnnn');
-    return res.redirect('/login');
+    req.logout((err) => {
+      if (err) {
+        console.error(err);
+        return res.status(500).send('Internal Server Error');
+      }
+      // Redirect to a different route after logout (e.g., home page)
+      return res.redirect('/login');
+    });
 
   };
   const isAdminAuthenticated = (req, res, next) => {
