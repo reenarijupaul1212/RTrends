@@ -80,13 +80,32 @@ module.exports = {
     applyOffers:async(req,res)=>{
 
         try{
-            const { userId, fullName, country, streetAddress, apartment, city, state, postcode, phone, email, orderNotes,couponCode, paymentOption } = req.body;
+            const { userId, fullName,houseName,  streetAddress, apartment, city, state, postcode, phone, email, orderNotes,couponCode, paymentOption } = req.body;
             const cart = req.session.cart;
             console.log(cart);
-            const addressString = `${fullName}, ${streetAddress}, ${apartment}, ${city}, ${state}, ${postcode}, ${country},${phone}`;
+            const addressString = `${fullName}, ${houseName},${streetAddress}, ${apartment}, ${city}, ${state}, ${postcode},${phone}`;
             
             const userid=req.user._id;
            
+            // Add the address for the user
+        const newAddress = new Address({
+            userId: userid,
+            fullName: fullName,
+            houseName: apartment,
+            email: email,
+            mobile: phone,
+            streetAddr: streetAddress,
+            city: city,
+            state: state,
+            country: 'YourCountryHere', // Provide the country as needed
+            pincode: postcode,
+            delivery: true, // Assuming this is a delivery address
+        });
+
+        const savedAddress = await newAddress.save();
+        if (!savedAddress) {
+            throw new Error('Failed to save the new address');
+        }
 
             // Assuming cart is stored in the session
             
@@ -200,20 +219,22 @@ try {
         var addressString;
         try {
             // Retrieve user's addresses
-            const address = await Address.find({ userId: req.user._id }).select('fullName houseName streetAddr city state pincode mobile email');
-
+           // const address = await Address.find({ userId: req.user._id }).select('fullName houseName streetAddr city state pincode mobile email');
+            const address = await Address.findOne({ userId: req.user._id })
+            .sort({ createdAt: -1 }) // Sort by createdAt field in descending order (-1)
+            .select('fullName houseName streetAddr city state pincode mobile email')
+            .exec();
             // Initialize an empty object to store the values
 
             console.log('address', address);
             // Iterate over each address object in the add array
 
-            address.forEach(address => {
                 // Construct a string containing the values separated by commas
                 addressString = `${address.fullName},${address.houseName} ,${address.streetAddr}, ${address.city}, ${address.state}, ${address.pincode},${address.pincode}`;
 
                 // Add the string to the object with the address _id as the key
 
-            });
+           
             const userid = req.user._id;
 
             // Retrieve user's cart from the database
@@ -243,7 +264,7 @@ try {
             req.flash('sucess', 'added');
             message = req.flash();
             // Render checkout page with data
-            return res.status(200).render('users/checkout', { totalPrice, addressString, Address: address, userid, user: req.user, userCart, message });
+            return res.status(200).render('users/checkout', { totalPrice, addressString, address: address, userid, user: req.user, userCart, message });
         } catch (error) {
             console.error('Error:', error);
             // Handle error response

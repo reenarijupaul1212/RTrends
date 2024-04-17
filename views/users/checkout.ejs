@@ -43,7 +43,7 @@
                             
 
                             <h6 class="checkout__title">Billing Details</h6>
-                            <% Address.forEach(function(address) { %>
+                            <% if (address){ %>
                                 
                                     <div class="checkout__input">
                                         <p>full Name<span></span></p>
@@ -89,7 +89,7 @@
                                     </div>
                                 </div>
                             </div>
-                            <%})%>
+                            <%}%>
                             <div class="checkout__input__checkbox">
                                 <label for="diff-acc">
                                     Note about your order, e.g, special noe for delivery
@@ -170,7 +170,7 @@
            function order(userId) {
     // Get input field values
     const fullName = document.getElementById('fullName').value.trim();
-    const country = document.getElementById('houseName').value.trim();
+    const houseName = document.getElementById('houseName').value.trim();
     const streetAddress = document.getElementById('streetAddress').value.trim();
     const apartment = document.getElementById('apartment').value.trim();
     const city = document.getElementById('city').value.trim();
@@ -190,7 +190,7 @@
     const emptyFields = [];
     if (!fullName) emptyFields.push(document.getElementById('fullName'));
     if(!houseName) emptyFields.push(document.getElementById('houseName'));
-    if (!country) emptyFields.push(document.getElementById('country'));
+
     if (!streetAddress) emptyFields.push(document.getElementById('streetAddress'));
     if(!apartment) emptyFields.push(document.getElementById('apartment'));
     if (!city) emptyFields.push(document.getElementById('city'));
@@ -225,7 +225,6 @@
         userId: userId,
         fullName: fullName,
         houseName:houseName,
-        country: country,
         streetAddress: streetAddress,
         apartment: apartment,
         city: city,
