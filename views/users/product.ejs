@@ -208,7 +208,7 @@
                             <% for(let i=0; i < products.length ;i++) { %>
                         <div class="col-lg-4 col-md-6 col-sm-6">
                             <div class="product__item">
-                                <div class="product__item__pic set-bg" data-setbg="/upload/products/<%=products[i].image%>"style="background-size: cover;background-position: top;
+                                <div class="product__item__pic set-bg" data-setbg="/upload/products/<%=products[i].images[0]%>"style="background-size: cover;background-position: top;
                                     background-repeat: no-repeat;">
                                     <ul class="product__hover">
                                         <li><a href=""onclick="addToWishlist('<%=products[i]._id%>')"><img src="img/icon/heart.png" alt=""></a></li>
@@ -293,7 +293,7 @@
         </div>
     </section> <script src="/js/user/products_page.js"></script>
     <%- include('../layouts/footer.ejs') %>
-
+    <%- include('../users/userFooter.ejs') %>
     <script>
         window.addEventListener('DOMContentLoaded', (event) => {
             // Get the id of the item from the URL hash
@@ -311,6 +311,7 @@
     <!-- JavaScript function to handle adding to wishlist -->
 <script>
     function addToWishlist(productId) {
+        event.preventDefault();
         fetch('/addToWishlist', {
             method: 'POST',
             headers: {
@@ -330,7 +331,7 @@
         })
         .catch(error => {
             console.error('Error adding product to wishlist:', error);
-            alert('Failed to add product to wishlist');
+            alert('Failed to add product to wishlistssss',error);
         });
     }
 
@@ -347,7 +348,7 @@
 
    
 </script>
-    Shop Section End
+    
     
 
     <script>

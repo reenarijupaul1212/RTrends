@@ -36,7 +36,8 @@ router.post('/razorPay/createOrder/:orderID',isUserAuthenticated, orderControlle
 router.post('/razorPay/payment-success',isUserAuthenticated, orderController.paymentSuccessHandler)
 router.get('/checkOut',isUserAuthenticated,checkoutController.checkOut);
 router.get('/orders',isUserAuthenticated,orderController.displayOrders);
-router.get('/profile',ensureAuthenticated,userController.getProfile);
+router.get('/profile',isUserAuthenticated,userController.getProfile);
+router.post('/editProfileImage',isUserAuthenticated,profileMuter.single('image'), userController.editProfileImage);
 router.post('/edit_profile/:id',isUserAuthenticated,profileMuter.single('image'),userController.editProfie);
 router.get('/otp_verify',userController.viewVerifyOtp);
 router.get("/dashboard", protectRoute, dashboardView);
@@ -44,13 +45,18 @@ router.get('/resend_otp',userController.reSendOtp);
 router.get('/forgot-password',userController.viewforgotPassword);
 router.post('/otp_verify',userController.verifyOtp);
 router.post('/login',loginUser);
+router.post('/updateBasic',isUserAuthenticated,userController.updateBasic);
 
 router.post('/forgot-password',userController.doForgotPassword); 
 router.post('/verify-coupon',checkoutController.couponVerificationHandler );
 // Define route for password reset
 router.get('/reset-password/:token', userController.viewPasswordRest);
 router.post('/signup',userController.registerUser);
-
+router.post('/passwordNew',isUserAuthenticated,userController.passwordNew);
+router.post('/deletAddress',isUserAuthenticated,userController.deletAddress);
+ router.post('/addNewAddress',isUserAuthenticated,userController.addNewAddress) ;  
+   router.post('/editAddress',isUserAuthenticated,userController.editAddress) ;
+ router.get('/fetchUpdatedAddressData',isUserAuthenticated,userController.getUpdatedAddress );
 // Example route for logging out
 router.get('/logout',userController.logOut);
 router.get('/product', productController.getProductViewPage);
@@ -71,7 +77,7 @@ router.get('/wallet',isUserAuthenticated,userController.renderWallet);
 router.route('/wishList')
     .get(isUserAuthenticated,wishlistController.WishListPage)
    .delete(isUserAuthenticated,wishlistController.removeFromWishList);
-   router.post('/addWishListToCart',isUserAuthenticated,cartController.addWishListToCart);
+   router.post('/addWishListToCart',cartController.addWishListToCart);
 router.get('/invoice/:orderID',isUserAuthenticated,orderController.renderInvoicePage);
 // !download invoice 
 

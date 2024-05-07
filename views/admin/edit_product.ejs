@@ -19,7 +19,35 @@
 <section>
     <div class="container">
     <h2>Edit Product</h2>
+    <div id="additionalImagesContainer" class="mb-3">
+        <label for="images" class="form-label">Additional Images:</label>
+        <!-- Container to display additional images -->
+        <div id="additionalImagesPreview">
+            <% product.images.forEach((image, index) => { %>
+            <div class="d-flex align-items-center mb-2">
+                <div id="additionalImageContainer_<%=index%>">
+                    <!-- Image -->
+                    <img src="/upload/products/<%= image %>" alt="Image" name="index" style="max-width: 50px; margin-right: 5px;">
+                    <button type="button" id="deleteButton_<%= index %>"class="btn btn-sm btn-danger ml-2" onclick="deleteImage('<%= index %>')">delete</button>
+                </div>
+                <div id="imageUpload_<%=index%>" style="display: none;">
+                    <form action="/admin/updateImage" method="POST" enctype="multipart/form-data">
+                        <input type="file" name="image" id="fileInput_<%= index %>" class="form-control" required>
+                        <input type="hidden" name="index" value="<%= index %>"> <!-- Add a hidden input for the index -->
+                        <input type="hidden" name="id" value="<%= product._id %>"> <!-- Add a hidden input for the product ID -->
+                        <button type="submit" class="btn btn-sm btn-danger ml-2">Upload</button>
+                        <button  class="btn btn-sm btn-danger ml-2" onclick="window.location.reload();">Cancel</button>
+                    </form>
+                </div>
+                
 
+                
+            </div>
+            <% }); %>
+        </div>
+        
+        
+    </div>
     <form id="editProductForm" action="/admin/editProduct/<%= product._id %>" method="POST" enctype="multipart/form-data">
         <!-- Product Name -->
         <div class="mb-3 ">
@@ -65,13 +93,13 @@
         <!-- Price -->
         <div class="mb-3">
             <label for="price" class="form-label">Price</label>
-            <input type="number" class="form-control" id="price" name="price" value="<%= product.price %>" required>
+            <input type="number" class="form-control" id="price" name="price" value="<%= product.price %>" required min="1">
         </div>
 
         <!-- Discount-->
         <div class="mb-3">
-            <label for="discount" class="form-label">Discount</label>
-            <input type="number" class="form-control" id="discount" name="discount" value="<%= product.rateOfDiscount %>" required>
+            <label for="discount" class="form-label">Discount</label>            
+            <input type="number" class="form-control" id="discount" name="discount" value="<%= product.rateOfDiscount %>" required min="0"max="99">
         </div>
            <!-- Discount-->
            <div class="mb-3">
@@ -82,46 +110,11 @@
         <div class="mb-3">
             <label for="stock" class="form-label">Stock</label>
             <input type="number" class="form-control" id="stock" name="stock" value="<%= product.stock %>" required>
-        </div>
- <!-- Image *****-->
- <div class="mb-3">
-    <label for="image" class="form-label">Product Image</label>
-    <!-- Hidden input field to store the image URL -->
-    <input type="hidden" id="imageUrl" name="imageUrl" value="<%= product.image %>">
-    <!-- Image display container -->
-    <div id="imageContainer">
-        <img src="/upload/products/<%= product.image %>" alt="Product Image" class="img-fluid" style="max-width: 200px;">
-        <!-- Close button to remove the image -->
-        <button type="button" id="removeImageButton" class="btn btn-danger ml-2">Remove</button>
-    </div>
-
-
-
-
-        <!-- Image -->
-        <div class="mb-3">
-            <label for="image" class="form-label">Product Image</label>
-            <input type="file" class="form-control" id="image" name="image" style="display: none;">
-        </div>
-        <div id="additionalImagesContainer" class="mb-3">
-            <label for="images" class="form-label">Additional Images:</label>
-            <!-- Container to display additional images -->
-            <div id="additionalImagesPreview" class="mt-2">
-                <% product.images.forEach((image, index) => { %>
-                    <div class="d-flex align-items-center mb-2">
-                        <!-- Image -->
-                        <img src="/upload/products/<%= image %>" alt="Image" style="max-width: 50px; margin-right: 5px;">
-                        <!-- Close Button -->
-                       
-                    </div>
-                <% }); %>
-                <button type="button" id="removeImagesButton"  class="btn btn-sm btn-danger ml-2" >Close</button>
-            </div>
-        </div>
-        
+   
+       
         <div class="mb-3">
             <label for="images" class="form-label">Additional Images:</label>
-            <input type="file" class="form-control" id="images" name="images" multiple style="display: none;">
+            <input type="file" class="form-control" id="image" name="images" multiple style="display: none;">
         </div>
 
         <!-- Active -->
@@ -146,15 +139,26 @@
 
 
         <!-- Submit Button -->
-        <button type="submit" class="btn btn-primary">Save Changes</button>
+        <button type="submit"  id="submitId"class="btn btn-primary">Save Changes</button>
     </form>
+    
+    
 </div>
 </section>
 
 <script>
-    document.addEventListener("DOMContentLoaded", function() {
+    
+    
+
+
+
+
+    document.addEventListener("DOMContentLoaded", function() 
+    
+    {
+
          // Close button event listener
-         document.getElementById("removeImageButton").addEventListener("click", function() {
+         document.getElementById("submitId").addEventListener("click", function() {
             // Hide the image container
             document.getElementById("imageContainer").style.display = "none";
             // Clear the image URL input value
@@ -163,14 +167,7 @@
             document.getElementById("image").style.display = "block";
         });
         
-        document.getElementById("removeImagesButton").addEventListener("click", function() {
-            // Hide the image container
-            document.getElementById("additionalImagesContainer").style.display = "none";
-            // Clear the image URL input value
-            //document.getElementById("imageUrl").value = "";
-            // Show the file input
-            document.getElementById("images").style.display = "block";
-        });
+    
         // Add an event listener to the form submit event
         document.getElementById("editProductForm").addEventListener("submit", function(event) {
             // Select all input and textarea elements within the form
@@ -205,5 +202,20 @@
                 event.preventDefault();
             }
         });
-    });
+
+   
+     
+  
+
+});
+
+function deleteImage(index) {
+    
+    document.getElementById(`additionalImageContainer_${index}`).style.display = 'none';
+    document.getElementById(`imageUpload_${index}`).style.display = 'block';
+}
+
+
+
+
 </script>

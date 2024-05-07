@@ -44,7 +44,7 @@ router.get('/addcategoryOffers',isAdminAuthenticated,adminController.renderCateg
 router.post('/categoryOffer/deactivate',isAdminAuthenticated,adminController.updateCategoryOffer);
 router.get('/edit-coupon/:id',isAdminAuthenticated,adminController.getEditCouponPage);
 router.get('/delete-coupon/:id',isAdminAuthenticated,adminController.deleteCoupon);
-//router.get('/edit-coupon/:id',isAdminAuthenticated,adminController.getEditCoupon);
+//router.get('/edit-coupon/:id',isAdminAuthenticated,adminController.[getEditCoupon);
 // ! chart data handler
 router.post('/edit-coupon/:id',isAdminAuthenticated,adminController.updatecoupon);
 router.route('/chart')
@@ -57,7 +57,7 @@ router.get('/salesReport/pdf/download', adminController.salesReportInPdf);
 router.get('/salesReportPdf',adminController.salesReportPdfRender)
 router.get('/add-product',isAdminAuthenticated,adminController.addProductRender);
 router.get('/add-category',isAdminAuthenticated,adminController.addCategoryRender);
-
+router.post('/updateImage',isAdminAuthenticated,productMulter.single('image'),adminController.updateImage);
 
 // Define route to fetch and render all brands
 router.get('/brands',isAdminAuthenticated, brandMulter.single('image'), adminController.brandsRender);
@@ -181,7 +181,7 @@ router.post('/add-category',isAdminAuthenticated, async (req, res, next) => {
     }
 });
 
-  router.post('/add-product',isAdminAuthenticated, productMulter.fields([{ name: 'image' }, { name: 'images', maxCount: 3 }]),adminController.addProduct );
+  router.post('/add-product',isAdminAuthenticated, productMulter.array('image',3),adminController.addProduct );
 
         
 

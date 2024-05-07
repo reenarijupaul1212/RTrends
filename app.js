@@ -1,4 +1,4 @@
-const express = require('express');
+const  express = require('express');
 const app = express();
 const path = require('path');
 var cors = require('cors')
@@ -13,7 +13,7 @@ const passport=require('passport');
 const {loginCheck}=require('./auth/passport');
 require('dotenv').config();
 // Mongo DB conncetion
-const database = process.env.DB_URI;
+var database = "mongodb+srv://reenarijupaul1212:123456Reena@cluster0.oltgmmp.mongodb.net/Rtrends?retryWrites=true&w=majority";
 mongoose.connect(database)
 .then(() => console.log('RTrend DB connect'))
 .catch(err => console.log(err));

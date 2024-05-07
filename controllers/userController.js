@@ -285,37 +285,45 @@ module.exports = {
   },
   getProfile: async (req, res) => {
     email = req.user.email;
+    id=req.user._id;
     const profil = await User.findOne({ email: email })
-    const addres = await Address.find({ userId: profil._id });
+    const addres = await Address.find({ userId: profil._id,fullName: { $ne: '' } });
     console.log(profil);
     console.log('profilllll');
     console.log(addres);
-    return res.status(200).render('users/profile', { profil: profil, add: addres, user: req.user,message:"" })
+    const order = await Order.find({ user: profil._id,status:'delivered' }).populate('user products.product'). sort({ createdAt: -1 }); 
+
+    console.log('ordersdelivered:',order);
+    return res.status(200).render('users/profile', { profil: profil, add: addres, user: req.user,message:"" ,orders:order})
   },
   editProfie: async (req, res, next) => {
     try {
+      const oldprofile=await User.findById(req.user._id);
      
-      if (req.body.passwod) {
+      if (req.body.password) {
         const salt = await bcrypt.genSalt(10);
-        let password = await bcrypt.hash(req.body.passwod, salt);
+        let password = await bcrypt.hash(req.body.password, salt);
         const updatepass = await User.findByIdAndUpdate(
           req.params.id, {
           password: password,
-        }
+        },
+        { new: true } 
         );
+        console.log('password up',updatepass); 
       };
-      
+     
       const updateprofile = await User.findByIdAndUpdate(
         req.params.id,
         {
           name: req.body.name,
           email: req.body.email,
           mobile: req.body.mobile,
-          profileImage: req.file.filename ,
+          //profileImage: req.file?req.file.name:oldprofile.profileImage,
         },
         { new: true } // Return the updated document
       );
       console.log('update profle');
+      
       console.log(updateprofile);
       let addres = await Address.findOne({ userId: req.params.id });
       const updateAddress = await Address.findByIdAndUpdate(
@@ -416,7 +424,8 @@ module.exports = {
       req.flash('success','An email has been sent with further instructions');
       message=req.flash();
       res.render('users/forgot-password', { user:req.user,message});
-    } catch (error) {
+    } 
+    catch (error) {
       console.error(error);
       req.flash('error','something wrong');
       message=req.flash();
@@ -504,8 +513,160 @@ res.render('users/wallet',{transactions,user:req.user});
   catch(error){
 console.log(error);
   }
+},
+passwordNew : async (req, res) => {
+  try {
+    
+    const oldprofile=await User.findById(req.user._id);
+     console.log(oldprofile,'hai old');
+    if (req.body.newPassword) {
+      const salt = await bcrypt.genSalt(10);
+      let password = await bcrypt.hash(req.body.newPassword, salt);
+      const updatepass = await User.findByIdAndUpdate(
+        req.user._id, {
+        password: password,
+      },
+      { new: true } 
+      );
+      console.log('password up',updatepass); 
+    };
+   
+
+    return res.status(200).json({ success: true, message: 'Password changed successfully' });
+  } catch (error) {
+    console.error('Error changing password:', error);
+    return res.status(500).json({ success: false, message: 'Internal server error' });
+  }
+},
+deletAddress:async(req,res)=>{
+  try{
+const{id}=req.body;
+const deletedAddress = await Address.findByIdAndDelete(id); // Find and delete the address
+
+        if (deletedAddress) {
+            res.status(200).json({ success: true, message: 'Address deleted successfully' });
+        } else {
+            res.status(404).json({ success: false, message: 'Address not found' });
+        }
+    } catch (error) {
+        console.error('Error deleting address:', error);
+        res.status(500).json({ success: false, message: 'Internal server error' });
+    }
+},
+
+getUpdatedAddress :async(req,res)=>{
+  try{
+const id=req.user._id;
+const address=await Address.findById(id);
+res.status(200).send({address});
+  }
+  catch(error){
+    console.error('Error fetching updated address data:', error);
+    res.status(500).send({ error: 'An error occurred while fetching updated address data.' });  
 }
 
+},
+addNewAddress :async(req,res)=>{
+  try{
+    const {  fullName,houseName, country, streetAddress, city, state, postcode, phone, email } = req.body;
+const id=req.user._id;
+const newAddress = new Address({
+  userId: id,
+  fullName: fullName,
+  houseName: houseName,
+  email: email,
+  mobile: phone,
+  streetAddr: streetAddress,
+  city: city,
+  state: state,
+  country: country, // Provide the country as needed
+  pincode: postcode,
+  delivery: true// Assuming this is a delivery address
+});
+const savedAddress = await newAddress.save();
+        if (!savedAddress) {
+            throw new Error('Failed to save the new address');
+        }
+res.status(200).send({success:true});
+  }
+  catch(error){
+    console.error('Error fetching updated address data:', error);
+    res.status(500).send({ error: 'An error occurred while fetching updated address data.' });  
+}
 
+},
+editAddress:async(req,res)=>{
+  try{
+    const {id, fullName,houseName, country, streetAddress, city, state, postcode, mobile, email } = req.body;
+
+    const updatedAddress = await Address.findByIdAndUpdate(id, {
+      fullName,
+      houseName,
+      email,
+      mobile,
+      streetAddr:streetAddress,
+      city,
+      state,
+      country,
+      pincode:postcode,
+      delivery:true
+  }, { new: true }); // { new: true } returns the updated document
+
+  if (!updatedAddress) {
+      // If the address with the specified ID is not found
+      return res.status(404).json({ error: "Address not found" });
+  }
+
+res.status(200).send({success:true});
+  }
+  catch(error){
+    console.error('Error fetching updated address data:', error);
+    res.status(500).send({ error: 'An error occurred while fetching updated address data.' });  
+}
+
+},
+editProfileImage:async(req,res)=>{
+try{
+  console.log('ok',req.file);
+  const oldprofile=await User.findById(req.user._id);
+  const updateprofile = await User.findByIdAndUpdate(
+    req.user._id,
+    {
+      
+    profileImage: req.file?req.file.filename:oldprofile.profileImage,
+    },
+    { new: true } // Return the updated document
+  );
+  console.log('update profle',updateprofile);
+  return res.status(200).json({success:true});
+}
+catch(error)
+{
+return res.status(500).send({error:"not uloaded"});
+}
+
+},
+updateBasic:async(req,res,next)=>
+  {
+try{
+const{firstName,phone}=req.body;
+
+const id=req.user._id;
+const updatedBasic = await User.findByIdAndUpdate(id, {
+  name:firstName,
+  mobile:phone
+}, { new: true }); // { new: true } returns the updated document
+console.log(updatedBasic);
+if(updatedBasic){
+  return res.status(303).redirect(`/profile`);
+}
 
 }
+catch(error){
+console.log(error);
+return res.status(303).redirect(`/profile`)
+}
+  }
+
+}
+

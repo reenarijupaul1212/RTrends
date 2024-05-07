@@ -7,6 +7,7 @@ const { error } = require('console');
 const Address = require('../models/addressModel');
 const Order = require('../models/ordermodel');
 const WishList = require('../models/wishListModel');
+const { session } = require('passport');
 
 module.exports = {
 
@@ -114,7 +115,7 @@ module.exports = {
 
             // Update the cart with the filtered items
             cart.items = updatedCartItems;
-
+            console.log('cart cartpage',cart)
             // If there are out of stock items, render the view with a message
             if (outOfStockItems.length > 0) {
 
@@ -142,7 +143,7 @@ module.exports = {
                     populate: {
                         path: 'product',
                         model: Product,
-                        select: 'name image stock offerPrice'
+                        select: 'name images stock offerPrice'
                     },
                 });
 
@@ -252,6 +253,9 @@ module.exports = {
             console.log('hiiiiiiiiiiiiiiiiiiiiiiiiii');
             console.log(existingCartItem, product);
             existingCartItem.quantity += 1;
+            if (existingCartItem.quantity>10){
+                existingCartItem.quantity=10;
+            }
             if (existingCartItem.quantity > product.stock)
                 existingCartItem.quantity = product.stock;
             await existingCartItem.save();

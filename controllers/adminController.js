@@ -2,7 +2,7 @@ const User = require('../models/userModel');
 const Product = require('../models/productModel');
 const Brand = require('../models/brandModel');
 const Category = require('../models/categoryModel');
-
+const fs=require('fs');
 const Order = require('../models/ordermodel');
 const Banner = require('../models/bannerModel');
 const Coupon = require('../models/couponModel');
@@ -11,6 +11,7 @@ const Address = require('../models/addressModel');
 const excelJS = require('exceljs');
 const path = require('path');
 const puppeteer = require('puppeteer');
+//const { default: products } = require('razorpay/dist/types/products');
 /*const adminHomePageView=(req,res,next)=>
 { res.render('users/admin-dashboard');};
 
@@ -420,13 +421,15 @@ Product.findOneAndUpdate({ _id: productId }, updateFields, { new: true }, (err, 
     addProduct:async (req, res, next) => {
         try {
             // Extract data from the request body
-            const { name, description, brand, category, size, price, stock, isFeatured,  } = req.body;
+            const { name, description, brand, category, size, price, stock, isFeatured,active } = req.body;
            
-            // Get the main image filename
-            const mainImage = req.files['image'][0].filename;
-    
-            // Get an array of image filenames
-            const imageArray = req.files['images'].map(file => file.filename);
+           console.log(req.files);
+           const uploadedFiles = req.files;
+        
+           // Extract filenames from the uploaded files and save to an array
+           const imageArray = uploadedFiles.map(file => file.filename);
+   
+          
     
             // Create a new product
             const newProduct = new Product({
@@ -437,8 +440,9 @@ Product.findOneAndUpdate({ _id: productId }, updateFields, { new: true }, (err, 
                 size,
                 price,
                 stock,
-                image: mainImage.toString(),
+                
                 images: imageArray,
+                active,
                 isFeatured
                 
             });
@@ -1341,7 +1345,7 @@ console.log('category is',categoryWiseChartData);
 
             console.log('server start date and end Date', startingDate, endingDate)
 
-            const browser = await puppeteer.launch({ headless: 'true', args: ["--no-sandbox", "--disable-setuid-sandbox"] });
+            const browser = await puppeteer.launch({ headless: 'true', executablePath: '/home/ubuntu/.cache/puppeteer/chrome/linux-123.0.6312.122/chrome-linux64/chrome',args: ["--no-sandbox", "--disable-setuid-sandbox"] });
             const page = await browser.newPage();
 
 
@@ -1365,7 +1369,7 @@ console.log('category is',categoryWiseChartData);
             // Add CSS to hide elements you want to exclude from PDF
             await page.addStyleTag({
                 content: `
-        /* Hide elements not needed in PDF */
+        /* Hide t needed in PDF */
         .breadcrumb-option, .breadcrumb__links, .my-5 .mx-5 .d-flex .align-items-center, #getExcelBtn, #getPDF, #getReport {
             display: none !important;
         }
@@ -1410,6 +1414,32 @@ console.log('category is',categoryWiseChartData);
 
             next(err);
         }
-    }
+    },
+    updateImage :async (req, res) => {
+        try {
+            const { id, index } = req.body; 
+            console.log(id,index);
+            // Extract other data from request body
+            const imageUrl = req.file ? req.file.filename : ''; // Get uploaded file URL
+            console.log(imageUrl); // Extract data from request body
+          
+            // Update the images array in the database for the specified product ID
+           const product= await Product.findById(id);
+           if (index < product.images.length) {
+            product.images[index] =imageUrl; // Replace the existing image
+          } else {
+            product.images.push(imageUrl); // Insert the new image at the end of the array
+          }
+          product.save();
+    console.log(product);
+    return res.status(303).redirect(`/admin/edit_product/${id}`);
+                                                          
+        } catch (error) {
+            console.error('Error updating image:', error);
+            res.status(500).json({ error: 'Error updating image' });
+        }
+    
 
 }
+}
+

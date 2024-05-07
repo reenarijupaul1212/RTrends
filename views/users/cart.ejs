@@ -45,8 +45,14 @@
                                     <% const productId = item.product.id %>
                                     <% const productID = productId.replace(/['"]+/g, ''); %>
                                     <div class="product__cart__item__pic">
-                                        <img style="max-width: 100px; max-height: 100px; width: auto; height: auto;" src="upload/products/<%= item.product.image %>" alt="">
+                                        <% if (item.product.images && item.product.images.length > 0) { %>
+                                            <img style="max-width: 100px; max-height: 100px; width: auto; height: auto;" src="upload/products/<%= item.product.images[0] %>" alt="">
+                                        <% } else { %>
+                                            <!-- Placeholder image or default image -->
+                                            <img src="path_to_default_image" alt="Default Image">
+                                        <% } %>
                                     </div>
+                                    
                                     <div class="product__cart__item__text">
                                         <h6><%= item.product.name %></h6>
                                         <% if (item.onOffer) { %>
@@ -64,7 +70,7 @@
                                         <!-- Decrease quantity icon -->
                                         <i class="fa fa-minus" style="margin-right: 5px;" onclick="updateDecQuantityOfCartItem('<%= item._id %>')"></i>
                                         <!-- Quantity input -->
-                                        <input type="text" value="<%= item.quantity %>" style="width: 30px; text-align: center;">
+                                        <input type="text" value="<%= item.quantity %>" style="width: 30px; text-align: center;" title="Maximum itmes limit 10">
                                         <!-- Increase quantity icon -->
                                         <i class="fa fa-plus" style="margin-left: 5px;" onclick="updateIncQuantityOfCartItem('<%= item._id %>')"></i>
                                     </div>
@@ -87,10 +93,10 @@
                 <% if (outOfStockItems && outOfStockItems.length > 0) { %>
                     <div class="row mt-4">
                         <div class="col-12">
-                            <h5 class="outOfStock">The following items are out of stock:</h5>
+                            <h5 class="outOfStock" style="color:red; font-weight:bolder;">The following items are out of stock:</h5>
                             <ul>
                                 <% outOfStockItems.forEach(item => { %>
-                                <li><%= item %></li>
+                                <li style="color: red;font-weight: bolder;"><%= item %></li>
                                 <% }); %>
                             </ul>
                         </div>
@@ -128,8 +134,9 @@
                     <% var totalPrice = 0;
                     cart.items.forEach(item => {
                     totalPrice += item.price * item.quantity;
-                    
+                  
                                     }); 
+                                    total= totalPrice;
                                     totalPrice=totalPrice.toFixed(2);%>
 
 <% if (cart.items.length) { %>
@@ -138,7 +145,7 @@
                         <li>Subtotal <span>₹<%= totalPrice %></span></li>
                         <li>Total <span>₹<%= totalPrice %></span></li>
                     </ul>
-                    <a onclick="proceedToBuy('<%= totalPrice %>')" class="primary-btn" style="color: white;" >Proceed to checkout</a>
+                    <a onclick="<%= totalPrice !== '0.00' ? 'proceedToBuy(' + totalPrice + ')' : 'showAlert()' %>"  class="primary-btn" style="color: white;" >Proceed to checkout</a>
                 </div>
                 <% } %>     <%}%>
             </div>
@@ -156,6 +163,14 @@
     <script src="js/owl.carousel.min.js"></script>
     <script src="js/main.js"></script>
     <script>
+        function showAlert() {
+    Swal.fire({
+        icon: 'warning',
+        title: 'Warning',
+        text: 'Total price is zero. Cannot proceed to checkout.',
+    });
+}
+
         async function removeItem(itemId) {
           try {
               const response = await fetch(`/removeItemFromCart/${itemId}`, { method: 'DELETE' });
@@ -201,7 +216,8 @@
       
       //gotocheckout
       function proceedToBuy(totalPrice) {
-          
+           // Check if the total price is zero
+
           fetch('/proceedToBuy', {
               method: 'POST',
               headers: {

@@ -2,7 +2,7 @@ const User = require('../models/userModel');
 const Cart = require('../models/cartModel');
 const CartItem = require('../models/cartItemModel');
 const Product = require('../models/productModel');
-const Path = require('path');
+const path = require('path');
 const { error } = require('console');
 const Address = require('../models/addressModel');
 const Order = require('../models/ordermodel');
@@ -13,7 +13,7 @@ const { ObjectId } = require('mongodb');
 const pdf=require('pdf-creator-node');
 const Wallets=require('../models/walletModel');
 const Brand=require('../models/brandModel');
-
+const puppeteer = require('puppeteer');
 const fs = require('fs');
 const ejs = require('ejs');
 const Category = require('../models/categoryModel');
@@ -650,7 +650,7 @@ catch(error){
             res.status(500).json({ error: 'Internal server error' });
         }
     },
-    downloadInvoice:async (req, res, next) => {
+    ownloadInvoice:async (req, res, next) => {
 
         try {
     
@@ -772,5 +772,66 @@ catch(error){
     
             next(err);
         }
+    },
+
+	downloadInvoice : async (req, res, next) => {
+    try {
+        if (!req.user._id) {
+            req.session.message = {
+                type: 'danger',
+                message: 'Session timeout. Please login to view and download the invoice.',
+            };
+            return res.redirect('/');
+        }
+
+        const orderID = new mongoose.Types.ObjectId(req.params.orderID);
+
+        if (!orderID) {
+            req.session.message = {
+                type: 'danger',
+                message: 'Failed to fetch order details!',
+            };
+            return res.redirect('/user/orders');
+        }
+
+        const orders = await Order.findById(orderID).populate('user products.product');
+
+        if (orders) {
+            const logoUrl = '/img/logo.png';
+            const data = { orders, logoUrl };
+
+            const html = ejs.render(
+                fs.readFileSync(path.join(__dirname, '..', 'views', 'users', 'invoicePage.ejs'), 'utf-8'),
+                data
+            );
+
+            const browser = await puppeteer.launch({
+                headless: true,
+                executablePath: '/home/ubuntu/.cache/puppeteer/chrome/linux-123.0.6312.122/chrome-linux64/chrome',
+                args: ["--no-sandbox", "--disable-setuid-sandbox"]
+            });
+            const page = await browser.newPage();
+            await page.setContent(html);
+
+            const date = new Date();
+            const pdfPath = path.join(__dirname, '..', 'docs', `${date.getTime()}_doc.pdf`);
+
+            await page.pdf({ path: pdfPath, format: 'A3', printBackground: true });
+
+            await browser.close();
+
+            res.download(pdfPath, (err) => {
+                if (err) {
+                    console.log('Failed to send the invoice PDF:', err);
+                }
+                // Delete the PDF file after downloading
+                fs.unlinkSync(pdfPath);
+            });
+        
+    } 
     }
+catch (err) {
+        next(err);
+    }
+}
 }

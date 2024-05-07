@@ -31,7 +31,7 @@
                     <th scope="col">Discount %</th>
                         <th scope="col">Offer Price</th>
                     <th scope="col">Stock</th>
-                    <th scope="col">Image</th>
+                  
                     <th scope="col">Images</th>
                     <th scope="col">Active</th>
                     <th scope="col">Featured</th>
@@ -78,15 +78,14 @@
                                 <td>
                                     <%= product.stock %>
                                 </td>
+                                <td>
+                                
                                 <div class="card">
-                                    <td><img src="/upload/products/<%= product.image %>" class="card-img-top"
-                                            alt="Main Image" style="max-width: 100px;"></td>
-                                    <td>
-                                        <% product.images.forEach(image=> { %>
-                                            <img src="/upload/products/<%= image %>" alt="Image"
-                                                style="max-width: 50px; margin-right: 5px;">
-                                            <% }); %>
-                                    </td>
+                                    <% product.images.forEach(image => { %>
+                                        <img src="/upload/products/<%= image %>" alt="Image" style="width: 75px; height: 75px; margin-right: 5px;">
+                                    <% }); %>
+                                </div>
+                            </td>
                                     <td>
                                         <%= product.active? true: false %>
                                     </td>

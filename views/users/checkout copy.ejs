@@ -1,0 +1,555 @@
+<%- include('../layouts/header.ejs') %>
+
+    <%- include('../users/userHeader.ejs') %>
+
+
+        <!-- Breadcrumb Section Begin -->
+        <section class="breadcrumb-option">
+            <div class="container">
+                <div class="row">
+                    <div class="col-lg-12">
+                        <div class="breadcrumb__text">
+                            <h4>Check Out</h4>
+                            <div class="breadcrumb__links">
+                                <a href="./index.html">Home</a>
+                                <a href="./shop.html">Shop</a>
+                                <span>Check Out</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <!-- Breadcrumb Section End -->
+
+        <!-- Checkout Section Begin -->
+        <section class="checkout spad">
+            <div class="container">
+                <div class="coupon__code" style="background-color: #ffffff;">
+                    <h6 class=""><span class="icon_tag_alt"></span> Have a coupon?
+                        enter your code to check it's validity</h6>
+
+                    <form style="margin-left: 33px; margin-top: 15px;" id="couponValidityChecker">
+                        <input type="text" name="couponCode">
+
+                        <button type="submit" class=" bg-dark border-0 text-white  font-weight-bold px-2"
+                            style="height: 27px;">verify</button>
+                    </form>
+                </div>
+                <div>
+                    <label><b>Select Address</b></label><br>
+<form>
+                    <% address.forEach(add=> { %>
+
+
+                        <input type="radio" class='radio' name="selectedAddress" value="<%= add._id %>" 
+                            style="display: inline-block;"required>
+                        <!-- Place the radio button on the left side -->
+                        <%= add.fullName %>,<%= add.houseName %>,<%= add.streetAddr %>,<%= add.city %>,<%= add.state %>
+                                            <%= add.pincode %></br>
+
+
+                                                <% }); %>
+                                                    <input type="radio" class='radio' name="selectedAddress" value="new"
+                                                        style="display: inline-block;" required> Add New Address
+
+                                                    </form>
+                                                    </div>
+
+
+
+                <div class="checkout__form">
+                    <form action="#">
+                        <div class="row">
+                            <div class="col-lg-8 col-md-6">
+
+
+                                <h6 class="checkout__title">Billing Details</h6>
+
+                                
+                                    <input type="hidden" id="selectedAddressId" name="selectedAddressId" value="new">
+
+                                    <div class="checkout__input">
+                                        <p>full Name<span></span></p>
+                                        <input type="text" id="fullName" value="" required>
+                                    </div>
+
+
+
+                                    <div class="checkout__input">
+                                        <p>House Name<span>*</span></p>
+                                        <input type="text" id='houseName' value="" required>
+                                    </div>
+
+                                    <div class="checkout__input">
+                                        <p>Address<span>*</span></p>
+                                        <input type="text" id="streetAddress" placeholder="Street Address"
+                                            class="checkout__input__add" value='' required>
+
+                                    </div>
+
+                                    <div class="checkout__input">
+                                        <p>Town/City<span>*</span></p>
+                                        <input type="text" id="city" value="" ,required>
+                                    </div>
+                                    <div class="checkout__input">
+                                        <p>Country/State<span>*</span></p>
+                                        <input type="text" id="state" value="" ,required>
+                                    </div>
+                                    <div class="checkout__input">
+                                        <p>Postcode / ZIP<span>*</span></p>
+                                        <input type="number" id='postcode' value="" required>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-lg-6">
+                                            <div class="checkout__input">
+                                                <p>Phone<span>*</span></p>
+                                                <input type="tel" id="phone" value="" ,required>
+                                            </div>
+                                        </div>
+                                        <div class="col-lg-6">
+                                            <div class="checkout__input">
+                                                <p>Email<span>*</span></p>
+                                                <input type="email" id="email" value="" , required>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    
+                                        <div class="checkout__input__checkbox">
+                                            <label for="diff-acc">
+                                                Note about your order, e.g, special noe for delivery
+                                                <input type="checkbox" id="diff-acc">
+                                                <span class="checkmark"></span>
+                                            </label>
+                                        </div>
+                                        <div class="checkout__input">
+                                            <p>Order notes<span>*</span></p>
+                                            <input type="text" id='orderNotes'
+                                                placeholder="Notes about your order, e.g. special notes for delivery."
+                                                required>
+                                        </div>
+                            </div>
+                            <div class="col-lg-4 col-md-6">
+                                <div class="checkout__order">
+                                    <h4 class="order__title">Your order</h4>
+                                    <div class="checkout__order__products">Product <span>Total</span></div>
+                                    <ul class="checkout__total__products">
+                                        <% if (userCart.items.length> 0) { %>
+                                            <% userCart.items.forEach((item, index)=> { %>
+                                                <li>
+                                                    <%= index + 1 %>. <%= item.product.name %>
+                                                            <%= item.quantity %><span> ₹<%= item.price*item.quantity %>
+                                                                </span>
+                                                </li>
+
+                                                <% })%>
+
+                                                    <%} else{%>
+
+                                                        <li> Your cart is empty </li>
+
+                                                        <%} %>
+                                    </ul>
+                                    <ul class="checkout__total__all">
+                                        <li id="subtotal">Subtotal <span id="subtotal">Rs.<%= totalPrice %></span></li>
+                                        <li id="discount">Discount <span id="discountAmount">Rs.0</span></li>
+                                        <li id="total">Total <span id="totalAmount">Rs.<%= totalPrice %></span></li>
+                                    </ul>
+                                    <div class="d-flex justify-content-center mb-3">
+                                        <input type="text" id="couponApplied" class="w-100 p-2" type="text"
+                                            name="couponApplied" disabled placeholder="Coupon Code not available">
+
+                                    </div>
+                                    <!-- Coupon code input for removing discount -->
+                                    <div class="d-flex justify-content-center mb-3">
+                                        <button id="removeDiscountBtn"
+                                            class="w-100 p-2 bg-danger text-white font-weight-bold" type="button"
+                                            onclick="removeDiscount()">Remove Discount</button>
+                                    </div>
+
+                                    <p>Choose Your Mode Of Payment</p>
+                                    <div class="checkout__input__checkbox">
+                                        <label for="payment_cod">COD
+                                            <input type="checkbox" id="payment_cod" name='paymentOption' value='COD'>
+                                            <span class="checkmark"></span>
+                                        </label>
+                                    </div>
+                                    <div class="checkout__input__checkbox">
+                                        <label for="payment_razorpay">
+                                            RazorPay Online
+                                            <input type="checkbox" id="payment_razorpay" name='paymentOption'
+                                                value='RazorPay'>
+                                            <span class="checkmark"></span>
+                                        </label>
+                                    </div>
+                                    <button type="submit" class="site-btn" <% if(userCart.length=0) { %>
+                                        disabled <%}%> onclick="order('<%=userid %>')">PROCEED</button>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </section>
+        <!-- Checkout Section End -->
+
+
+
+
+
+        <!-- Checkout Section End -->
+        <script>
+           async function order(userId) {
+                // Get input field values
+                const userid = userId;
+                const selectedAddressId = document.getElementById('selectedAddressId').value;
+                const fullName = document.getElementById('fullName').value.trim();
+                const houseName = document.getElementById('houseName').value.trim();
+                const streetAddress = document.getElementById('streetAddress').value.trim();
+
+                const city = document.getElementById('city').value.trim();
+                const state = document.getElementById('state').value.trim();
+                const postcode = document.getElementById('postcode').value.trim();
+                const phone = document.getElementById('phone').value.trim();
+                const email = document.getElementById('email').value.trim();
+                const orderNotes = document.getElementById('orderNotes').value.trim();
+                const couponCode = document.getElementById('couponApplied').value.trim();
+                const paymentOption = document.querySelector('input[name="paymentOption"]:checked').value;
+                document.querySelectorAll('input').forEach(input => {
+                    input.addEventListener('input', () => {
+                        input.style.backgroundColor = ''; // Remove background color when input changes
+                    });
+                });
+                // Check if any required field is empty
+                const emptyFields = [];
+                if (!fullName) emptyFields.push(document.getElementById('fullName'));
+                if (!houseName) emptyFields.push(document.getElementById('houseName'));
+
+                if (!streetAddress) emptyFields.push(document.getElementById('streetAddress'));
+
+                if (!city) emptyFields.push(document.getElementById('city'));
+                if (!state) emptyFields.push(document.getElementById('state'));
+                if (!postcode) emptyFields.push(document.getElementById('postcode'));
+                if (!phone) emptyFields.push(document.getElementById('phone'));
+                if (!email) emptyFields.push(document.getElementById('email'));
+                if (!orderNotes) emptyFields.push(document.getElementById('orderNotes'));
+
+                if (emptyFields.length > 0) {
+
+                    alert('Please fill out all required fields.');
+
+                    // Apply background color to empty fields
+                    emptyFields.forEach(field => {
+                        field.style.backgroundColor = 'lightgray';
+                    });
+
+                    // Set focus to the first empty input field
+                    emptyFields[0].focus();
+
+                    return;
+                }
+
+                // Remove the background color from previously highlighted empty fields
+                document.querySelectorAll('.empty-field').forEach(field => {
+                    field.style.backgroundColor = '';
+                });
+
+                // Prepare form data
+                const formData = {
+                    selectedAddressId: selectedAddressId,
+                    userId: userid,
+                    fullName: fullName,
+                    houseName: houseName,
+                    streetAddress: streetAddress,
+
+                    city: city,
+                    state: state,
+                    postcode: postcode,
+                    phone: phone,
+                    email: email,
+                    orderNotes: orderNotes,
+                    couponCode: couponCode,
+                    paymentOption: paymentOption
+                };
+
+                const xhr = new XMLHttpRequest();
+    xhr.open('POST', '/checkOut/applyOffers', true);
+    xhr.setRequestHeader('Content-Type', 'application/json');
+
+    xhr.onload = function () {
+        if (xhr.status >= 200 && xhr.status < 300) {
+            const response = JSON.parse(xhr.responseText);
+            if (response.success) {
+                console.log('success');
+                window.location.href = response.url;
+            } else {
+                console.log('failure');
+                handleFailure(response.message);
+            }
+        } else {
+            console.error('Request failed with status:', xhr.status);
+            alert('There was an error processing your order. Please try again later.');
+        }
+    };
+
+    xhr.onerror = function () {
+        console.error('Request failed');
+        alert('There was an error processing your order. Please try again later.');
+    };
+
+    xhr.send(JSON.stringify(formData));
+}
+
+function handleFailure(message) {
+    const notificationMessage = document.getElementById('notificationMessage');
+    const messageLine = document.getElementById('messageLine');
+
+    notificationMessage.hidden = false;
+    messageLine.classList.add('red');
+    messageLine.innerText = message;
+    window.scrollTo(0, 0);
+
+    setTimeout(() => {
+        notificationMessage.hidden = true;
+        messageLine.classList.remove('red');
+    }, 3000);
+}
+            // Get both checkboxes
+            const codCheckbox = document.getElementById('payment_cod');
+            const razorpayCheckbox = document.getElementById('payment_razorpay');
+
+            // Add event listeners to checkboxes
+            codCheckbox.addEventListener('change', function () {
+                if (this.checked) {
+                    razorpayCheckbox.checked = false; // Uncheck RazorPay if COD is checked
+                }
+            });
+
+            razorpayCheckbox.addEventListener('change', function () {
+                if (this.checked) {
+                    codCheckbox.checked = false; // Uncheck COD if RazorPay is checked
+                }
+            });
+
+
+
+
+
+
+            document.addEventListener('DOMContentLoaded', () => {
+                const verifyButton = document.getElementById('couponValidityChecker').querySelector('button[type="submit"]');
+
+                verifyButton.addEventListener('click', async (event) => {
+                    event.preventDefault();
+                    const couponCode = document.querySelector('input[name="couponCode"]').value.trim();
+                    alert(couponCode);
+
+
+                    try {
+                        const response = await fetch('/verify-coupon', {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/json'
+                            },
+                            body: JSON.stringify({ couponCode })
+                        });
+
+                        const data = await response.json();
+
+                        // Handle the response based on the validity status
+                        if (data.success) {
+                            // Set coupon code in the input field
+                            document.getElementById('couponApplied').value = couponCode;
+                            // Calculate discount amount and update total
+                            // Assuming you have received the discount amount from your server responsment
+
+                            var discountAmount = data.discount;
+
+                            console.log(discountAmount);
+                            // Update the discount amount in the HTML
+                            const discountAmountElement = document.getElementById('discountAmount');
+                            let disAmount = discountAmount.toFixed(2);
+                            discountAmountElement.textContent = `Rs.${disAmount}`;
+
+                            // Get the subtotal element and extract the subtotal value
+                            const subtotalElement = document.getElementById('subtotal');
+                            const subtotalValue = parseFloat(subtotalElement.querySelector('span').innerText.slice(3)); // Extracting the number from the string
+
+                            // Calculate the total amount after applying the discount
+                            const totalAfterDiscount = subtotalValue - discountAmount;
+
+                            // Update the total amount in the HTML
+                            const totalElement = document.getElementById('totalAmount');
+                            totalElement.textContent = `Rs.${totalAfterDiscount}`;
+                            Swal.fire({
+                                icon: 'success',
+                                title: 'Success',
+                                text: data.message
+                            });
+                        } else {
+                            const discountAmountElement = document.getElementById('discountAmount');
+                            discountAmountElement.textContent = `Rs. 0.00`;
+                            // Set coupon code in the input field
+                            document.getElementById('couponApplied').value = "";
+                            // Get the subtotal element and extract the subtotal value
+                            const subtotalElement = document.getElementById('subtotal');
+                            const subtotalValue = '<%=totalPrice %>';// Extracting the number from the string
+
+                            // Calculate the total amount after applying the discount
+
+
+                            // Update the total amount in the HTML
+                            const totalElement = document.getElementById('totalAmount');
+                            totalElement.textContent = `Rs.<%=totalPrice%>`;
+                            // SweetAlert error popup
+
+                            Swal.fire({
+                                icon: 'error',
+                                title: 'Error',
+                                text: data.message
+                            });
+                        }
+                        if (data.redirectURL) {
+                            window.location.href = data.redirectUrl;
+                            Swal.fire({
+                                icon: 'error',
+                                title: 'Error',
+                                text: data.message
+                            });
+                            // Redirect the user to the specified URL
+
+                        }
+                    } catch (error) {
+                        console.error('Error verifying coupon:', error);
+                        // SweetAlert error popup for server errors
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Error',
+                            text: 'An error occurred while verifying the coupon.'
+                        });
+                    }
+                });
+            });
+
+
+
+
+            // Function to remove applied discount
+            function removeDiscount() {
+                // Reset the discount amount to 0
+                const discountAmountElement = document.getElementById('discountAmount');
+                discountAmountElement.textContent = 'Rs. 0.00';
+                document.getElementById('couponApplied').value = "";
+                // Update the total amount to subtotal value
+                const totalElement = document.getElementById('totalAmount');
+                totalElement.textContent = `Rs.<%=totalPrice%>`;
+                console.log('hai on remove coupon');
+                // Hide the remove discount button
+                document.getElementById('removeDiscountContainer').style.display = 'none';
+                // Get the subtotal element and extract the subtotal value
+                // const subtotalElement = document.getElementById('subtotal');
+                //const subtotalValue = parseFloat(subtotalElement.querySelector('span').innerText.slice(3)); // Extracting the number from the string
+
+
+            }
+
+
+ // Parse the JSON string into a JavaScript object
+                    
+                    // Get all radio buttons with the name "selectedAddress"
+                    const radioButtons = document.querySelectorAll('input[type="radio"][name="selectedAddress"]');
+
+                    // Add change event listener to each radio button
+                    radioButtons.forEach(radioButton => {
+                        radioButton.addEventListener('change', () => {
+                            event.preventDefault();
+                            const addressData = JSON.parse('<%- JSON.stringify(address) %>');
+
+                            
+                            if (radioButton.checked) {
+                                // Get the selected address ID from the radio button value
+                                var selectedAddressId = radioButton.value;
+                            
+
+                                // Find the selected address object based on the ID
+                                const selectedAddress = addressData.find(address => address._id === selectedAddressId);
+
+                            
+                                // Populate the address form fields with the selected address details
+                                if (selectedAddress) {
+                                    document.getElementById('selectedAddressId').value = selectedAddressId;
+                                    document.getElementById('fullName').value = selectedAddress.fullName;
+                                    document.getElementById('houseName').value = selectedAddress.houseName;
+                                    document.getElementById('streetAddress').value = selectedAddress.streetAddr;
+                                    document.getElementById('city').value = selectedAddress.city;
+                                    document.getElementById('state').value = selectedAddress.state;
+                                    document.getElementById('postcode').value = selectedAddress.pincode;
+                                    document.getElementById('email').value = selectedAddress.email;
+                                    document.getElementById('phone').value = selectedAddress.mobile;
+                                    // Populate other fields as needed'
+                                } else {
+                                    document.getElementById('selectedAddressId').value = selectedAddressId;
+                                    document.getElementById('fullName').value = "";
+                                    document.getElementById('houseName').value = "";
+                                    document.getElementById('streetAddress').value = "";
+                                    document.getElementById('city').value = "";
+                                    document.getElementById('state').value = "";
+                                    document.getElementById('postcode').value = 0;
+                                    document.getElementById('email').value = "";
+                                    document.getElementById('phone').value = 0;
+                                    // Populate other fields as needed
+                                }
+                            }
+                        });
+                    });
+                
+
+
+                    document.addEventListener('DOMContentLoaded', function () {
+                        const codCheckbox = document.getElementById('payment_cod');
+                        const totalPrice = parseFloat('<%= totalPrice %>'); // Assuming totalPrice is passed from the server
+
+                        // Function to check if COD checkbox can be selected based on total price
+                        function checkCOD() {
+                            if (totalPrice > 1000) {
+                                codCheckbox.checked = false; // Uncheck COD checkbox
+                                const confirmMessage = 'COD payment cannot be selected for orders above 1000. Click OK to go to the cart page.';
+                                if (confirm(confirmMessage)) {
+                                    window.location.href = '/cart'; // Redirect to cart page
+                                }
+                            }
+                        }
+
+                        // Call the checkCOD function initially
+                        checkCOD();
+
+                        // Attach change event listener to the COD checkbox
+                        codCheckbox.addEventListener('change', function () {
+                            if (this.checked && totalPrice > 1000) {
+                                this.checked = false; // Uncheck COD checkbox if total price is above 1000
+                                const confirmMessage = 'COD payment cannot be selected for orders above 1000. Click OK to go to the cart page.';
+                                if (confirm(confirmMessage)) {
+                                    window.location.href = '/cart'; // Redirect to cart page
+                                }
+                            }
+                        });
+                    });
+  
+        </script>
+
+
+        <%- include('../users/userFooter.ejs') %>
+
+
+            <%- include('../layouts/footer.ejs') %>
+                <script>
+                   
+
+
+
+                </script>
+                <script>
+                   
+                  
+                   
+                </script>

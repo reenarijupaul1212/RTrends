@@ -1,5 +1,87 @@
 
+<style>
+    .form-group {
+        margin-bottom: 15px;
+    }
 
+    .error-message {
+        color: red;
+        font-size: 20px;
+        margin-top: 5px;
+    }
+</style>
+<style>
+.popup {
+    display: none;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: #fff;
+    padding: 20px;
+    border: 1px solid #ccc;
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+    z-index: 1000;
+}
+
+.popup input[type="text"],
+.popup input[type="email"],
+.popup input[type="tel"],
+.popup input[type="button"] {
+    margin: 5px 0;
+}
+
+
+</style>
+<style>
+    * {box-sizing: border-box}
+    body {font-family: "Lato", sans-serif;}
+    
+    /* Style the tab */
+    .tab {
+      float: left;
+      border: 1px solid #ccc;
+      background-color: #f1f1f1;
+      width: 15%;
+      height: 400px;
+    }
+    
+    /* Style the buttons inside the tab */
+    .tab button {
+      display: block;
+      background-color: inherit;
+      color: black;
+      padding: 22px 16px;
+      width: 100%;
+      border: none;
+      outline: none;
+      text-align: left;
+      cursor: pointer;
+      transition: 0.3s;
+      font-size: 17px;
+    }
+    
+    /* Change background color of buttons on hover */
+    .tab button:hover {
+      background-color: #ddd;
+    }
+    
+    /* Create an active/current "tab button" class */
+    .tab button.active {
+      background-color: #ccc;
+    }
+    
+    /* Style the tab content */
+    .tabcontent {
+      float: left;
+      padding: 0px 12px;
+      border: 1px solid #ccc;
+      width: 80%;
+      border-left: none;
+      height: 450px;
+      overflow-y: auto; /* Enable vertical scrolling */
+    }
+    </style>
 <%- include('../layouts/header.ejs') %>
 <%- include('../users/userHeader.ejs') %>
 
@@ -7,12 +89,12 @@
 <section class="breadcrumb-option">
     <div class="container">
         <div class="row">
-            <div class="col-lg-12">
+            <div class="col-lg-12 mt-0">
                 <div class="breadcrumb__text">
                     <h4>Edit Profile</h4>
                     <div class="breadcrumb__links">
                         <a href="/">Home</a>
-                        <span>Edit Profile</span>
+                        <span>Profile</span>
                     </div>
                 </div>
             </div>
@@ -20,165 +102,443 @@
     </div>
 </section>
 
-<section class="user-section">
-    <div class="container">
-        <div class="row">
-            <div class="col-12">
-                <!-- Page title -->
+<section>
+    <div class="mt-1 w-100 d-flex justify-content-left" style="padding-left: 40px; size: 150px;">
+    <div class="d-flex justify-content-center flex-column align-items-center mb-4 ms-4">
 
-                <!-- Form START -->
-
-                <div class="row mb-5 gx-5">
-                    <!-- Contact detail -->
-                    <div class="col-xxl-8 mb-5 mb-xxl-0">
-                        <div class="bg-secondary-soft px-4 pt-5 pb-0 rounded">
-                            <div class="row g-3">
-                                <h3 class="mb-5 mt-5 text-center font-weight-bold "> Edit Your Personal Details</h3>
-
-
-                                <form action="/edit_profile/<%=profil._id %>" method="post" enctype="multipart/form-data"  class="row" id="editProfileForm">
-                                    <!-- First Name -->
-
-                                    <div class="d-flex justify-content-center flex-column align-items-center mb-4">
-
-                                        <label class="form-label">Profile Pic</label>
-                                        <img src="/upload/profile/<%= profil.profileImage %>" alt="profile Image" class="img-fluid">
-                                        <input id="imageInput" name="image" class="form-control w-75"
-                                            type="file" placeholder="select your profile pic" accept="image/*" required>
-
-
-                                    </div>
-
-                                    <div class="col-md-6">
-
-                                        <label class="form-label">First Name </label>
-
-                                        <input type="text" class="form-control" aria-label="First name"
-                                            name="firstName" value="<%= profil.name %>">
-                                    </div>
-                 
-                                    <!-- Phone number -->
-                                    <div class="col-md-6">
-                                        <label class="form-label">Phone number </label>
-                                        <input type="text" class="form-control" placeholder=""
-                                            aria-label="Phone number" name="phone" value="<%= profil.mobile %>">
-                                    </div>
-                                    <!-- Mobile number -->
-                                    
-                                    <!-- Email -->
-                                    <div class="col-md-6">
-                                        <label for="inputEmail4" class="form-label">Email </label>
-                                        <input readonly type="email" class="form-control" id="inputEmail4"
-                                            value="<%= user.email %>">
-                                    </div>
-                                   
-
-
-                                    <div class="mt-5 w-100 d-flex justify-content-center">
-
-                                        <button style="width: 40%;" class=" btn-dark p-1" type="submit">Edit
-                                            Profile</button>
-                                            
-
-                                    </div>
-
-                               
-                            </div>
-                        </div> <!-- Row END -->
-                    </div>
-                </div>
-
-
-            
-         
-
-    <div id="modal" style="position: absolute;top:0 ; z-index: 11; height: 100vh; width: 100vw; background-color: rgba(0, 0, 0, 0.479);" class="d-flex d-none justify-content-center align-items-center ">
-
-        <div class=" d-flex flex-column justify-content-center" style=" background-color: rgb(255, 255, 255); height: 450px ; width: 50%; ">
-
-            <div style="height: 80%;" class="  d-flex justify-content-center align-items-center ">
-
-                <img id="cropImg" style="height: 90% ;width:80%;" alt="">
-
-            </div>
-            <div class="d-flex  justify-content-center ">
-                <button id="cropBtn" class="nav-link mt-4 mb-4" style="background-color: black; color:whitesmoke ;padding :10px"> CROP THE IMG</button>
-
-            </div>
+        <div style="text-align: center;"> <!-- Center align the content -->
+            <img style="width: 175px; height: 175px; border-radius: 50%; margin-bottom: 10px;" src="/upload/profile/<%= profil.profileImage %>" alt="profile Image">
+            <h4><%= profil.name %></h4> <!-- Use h4 for the name -->
+            <button style="padding: 5px 10px; background-color: #0a0109; color: #fff; border: none; cursor: pointer; border-radius: 5px;" id="editImage" onclick="toggleUpload()">Edit</button>
+            <!-- Add enctype attribute for file uploads -->
+            <form id="uploadForm" enctype="multipart/form-data" style="display: none;">
+                <input id="imageInput" name="image" class="form-control w-75" type="file" accept="image/*" required>
+                
+                <button type="button" id="uploadButton" onclick="uploadFile()">Upload</button> <!-- Use type="button" to prevent form submission -->
+                <button onclick="location.reload()">Cancel</button>
+            </form>
         </div>
+        
+        <script>
+           function toggleUpload() {
+    var uploadForm = document.getElementById('uploadForm');
+    var editButton = document.getElementById('editImage');
+    var uploadButton = document.getElementById('uploadButton'); // Get the upload button
+
+    if (uploadForm.style.display === 'none')
+     {
+        uploadForm.style.display = 'block';
+        editButton.innerHTML = 'Edit'
+    } 
+    
+    else {
+        uploadForm.style.display = 'block';
+        editButton.innerHTML = 'cancel';
+        uploadButton.disabled = false; // Enable the upload button when cancelling
+    }
+}
+
+// Update the uploadFile function to handle file upload
+function uploadFile() {
+    const fileInput = document.getElementById('imageInput');
+    const file = fileInput.files[0];
+alert('hai');
+    if (!file) {
+        console.error('No file selected.');
+        alert('Please select a file.');
+        return;
+    }
+
+    const formData = new FormData();
+    formData.append('image', file);
+
+    fetch('/editProfileImage', {
+        method: 'POST',
+        body: formData
+    })
+    .then(response => {
+        if (response.ok) {
+            console.log('File uploaded successfully.');
+            // Add logic to update the profile image in the UI if needed
+          // You can perform further actions here
+          window.location.reload();
+        } else {
+            console.error('File upload failed.');
+        }
+    })
+    .catch(error => {
+        console.error('Error:', error);
+    });
+}
+
+
+
+        </script>
+       
+
+    </div> 
     </div>
-</section>
+<div class="mt-1 w-100 d-flex justify-content-center">
+   
+<div class="tab">
+  <button class="tablinks" onclick="openCity(event, 'London')" id="defaultOpen">Basic Details</button>
+  <button id='address'class="tablinks" onclick="openCity(event, 'Paris')">Address</button>
+  <button class="tablinks" onclick="openCity(event, 'Tokyo')">Order Again</button>
+  <button class="tablinks" onclick="openCity(event, 'Password')">Password Change</button> 
+</div> 
 
-<section class="address-section" >
-    <div class="container">
-    <!-- Addresses section -->
-    <h2 class="mb-3">Addresses</h2>
-    <% add.forEach((address,index) => { %>
-    <!-- Display existing addresses -->
-    <div class="mb-3">
-        <label for="fullName_<%= index %>">Full Name:</label>
-        <input type="text" id="fullName_<%= index %>" name="fullName" value="<%= address.fullName %>" required>
+<div id="London" class="tabcontent">
+    <form action="/updateBasic"  method="post" id="updateBasic" onsubmit="return validateForm()">
+    <div class="col-md-6 mt-4">
+
+        <label class="form-label">First Name </label>
+
+        <input type="text" class="form-control" aria-label="First name"
+            name="firstName" value="<%= profil.name %>" onchange="showCancelButton();" required>
     </div>
 
-    <div class="mb-3">
-        <label for="houseName_<%= index %>">House Name:</label>
-        <input type="text" id="houseName_<%= index %>" name="houseName" value="<%= address.houseName %>" required>
+    <!-- Phone number -->
+    <div class="col-md-6">
+        <label class="form-label">Phone number </label>
+        <input type="tel" class="form-control" placeholder=""
+            aria-label="Phone number" name="phone" value="<%= profil.mobile %>" onchange="showCancelButton();"  required maxlength="10">
     </div>
-
-    <div class="mb-3">
-        <label for="email_<%= index %>">Email:</label>
-        <input type="email" id="email_<%= index %>" name="Aemail" value="<%= address.email %>" required>
+    <!-- Mobile number -->
+    
+    <!-- Email -->
+    <div class="col-md-6">
+        <label for="inputEmail4" class="form-label">Email </label>
+        <input readonly type="email" class="form-control" id="inputEmail4"
+            value="<%= user.email %>">
     </div>
+    <button type="submit"  value="submit" class="btn btn-sm btn-danger ml-2">Update</button>
+    
+    </form>
+    <button id="cancelButton"  class="btn btn-sm btn-danger ml-2 mt-4" onclick="window.location.href='/profile';" style="display: none;">Cancel</button>
+</div>
+<script>
 
-    <div class="mb-3">
-        <label for="mobile_<%= index %>">Mobile:</label>
-        <input type="tel" id="mobile_<%= index %>" name="Amobile" value="<%= address.mobile %>" required>
-    </div>
+      function validateForm() {
+        const firstName = document.getElementById('updateBasic').elements['firstName'].value.trim();
+        alert(firstName);
+        const phone = document.getElementById('updateBasic').elements['phone'].value.trim();
+        
 
-    <div class="mb-3">
-        <label for="streetAddr_<%= index %>">Street Address:</label>
-        <input type="text" id="streetAddr_<%= index %>" name="streetAddr" value="<%= address.streetAddr %>" required>
-    </div>
+        console.log('Phone number:', phone);
+        console.log('Length:', phone.length);
 
-    <div class="mb-3">
-        <label for="city_<%= index %>">City:</label>
-        <input type="text" id="city_<%= index %>" name="city" value="<%= address.city %>" required>
-    </div>
+        if (firstName === '') {
+            alert('Please enter your First Name.');
+            return false; // Prevent form submission
+        }
 
-    <div class="mb-3">
-        <label for="state_<%= index %>">State:</label>
-        <input type="text" id="state_<%= index %>" name="state" value="<%= address.state %>" required>
-    </div>
+        if (phone === '') {
+            alert('Please enter your Phone Number.');
+            return false; // Prevent form submission
+        }
 
-    <div class="mb-3">
-        <label for="country_<%= index %>">Country:</label>
-        <input type="text" id="country_<%= index %>" name="country" value="<%= address.country %>" required>
-    </div>
+        // Check if phone number is exactly 10 digits
+        if (!(/^\d{10}$/.test(phone))) {
+            alert('Phone Number must be exactly 10 digits.');
+            return false; // Prevent form submission
+        }
 
-    <div class="mb-3">
-        <label for="pincode_<%= index %>">Pincode:</label>
-        <input type="text" id="pincode_<%= index %>" name="pincode" value="<%= address.pincode %>" required>
-    </div>
+        return true; // Allow form submission
+    }
+    function showCancelButton() {
+        const cancelButton = document.getElementById('cancelButton');
+        cancelButton.style.display = 'block';
+    }
+</script>
+<div id="Paris" class="tabcontent">
 
-    <!-- Add other address fields as needed -->
+  <!-- Edit Popup Form -->
+<div id="editPopup" class="popup">
+    <form id="editForm" >
+        <input type="hidden" id="addressId" name="addressId" >
+        <!-- Edit form fields -->
+        <input type="text" id="editName" name="name" placeholder="Name">
+        <input type="text" id="editHouseName" name="houseName" placeholder=" House Name">
+        <input type="email" id="editEmail" name="email" placeholder="Email">
+        <input type="tel" id="editMobile" name="mobile" placeholder="Mobile">
+       
+        <input type="text" id="editStreetAddr" name="streetAddr" placeholder="streetAddr">
+        <input type="text" id="editCity" name="city" placeholder="City">
+        <input type="text" id="editState" name="state" placeholder="State">
+        <input type="text" id="editCountry" name="country" placeholder="Country">
+        <input type="text" id="editPincode" name="pincode" placeholder="Pincode">
+        <input type="checkbox" id="editdeliveryCheckbox"  >
+        <label for="editdeliveryCheckbox">Delivery</label>
 
-    <!-- Submit button for the form -->
-    <% }); %>
+        <input type="button" value="Save" onclick="saveEdit()">
+        <input type="button" value="Cancel" onclick="closePopup('editPopup')">
+       
+    </form>
 </div>
 
-<div class="mt-5 w-100 d-flex justify-content-center">
+<!-- Add Popup Form -->
+<div id="addPopup" class="popup">
+    <form id="addForm">
+        <!-- Add form fields -->
+        
+        <input type="text" id="addName" name="name" placeholder="Name" required>
+        <input type="text" id="addHouseName" name="houseName" placeholder=" House Name">
+        <input type="email" id="addEmail" name="email" placeholder="Email" pattern="[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}" title="Please enter a valid email address" required>
+        <input type="tel" id="addMobile" name="mobile" placeholder="Mobile" pattern="[0-9]{10}" title="Please enter a 10-digit mobile number" required>
+       
+        <input type="text" id="addStreetAddr" name="streetAddr" placeholder="streetAddr"required>
+        <input type="text" id="addCity" name="city" placeholder="City">
+        <input type="text" id="addState" name="state" placeholder="State">
+        <input type="text" id="addCountry" name="country" placeholder="Country">
+        <input type="text" id="addPincode" name="pincode" placeholder="Pincode">
+        <input type="checkbox" id="adddeliveryCheckbox" value="">
+        <label for="adddeliveryCheckbox">Delivery</label>
+        <input type="button" value="Add" onclick="saveAdd()">
+        <input type="button" value="Cancel" onclick="closePopup('addPopup')">
+    </form>
+   
+</div>
 
-    <button style="width: 40%;" class=" btn-dark p-1" type="submit">Edit
-        Profile</button>
+<!-- Table with Edit and Add buttons -->
+<table class="table"> 
+    <thead>
+        <tr>
+            <th>full Name</th>
+            <th>House Name</th>
+            <th>Add.Email</th>
+            <th>Add.Mobile</th>
+            <th>Street Adddress</th>
+            <th>City</th>
+            <th>State</th>
+            <th>Country</th>
+            <th>Pincode</th>
+            <th>Delivery Address</th>
+            
+        </tr>
+    </thead>
+    <tbody>
+        <% add.forEach((address,index) => { %>
+        <tr>
+            <td><%=address.fullName%></td>
+            <td><%=address.houseName%></td>
+            <td><%=address.email%></td>
+            <td><%=address.mobile%></td>
+            <td><%=address.streetAddr%></td>
+            <td><%=address.city%></td>
+            <td><%=address.state%></td>
+            <td><%=address.country%></td>
+             <td><%=address.pincode%></td>
+
+            
+            <td><%=address.delivery%></td>
+
+            
+            
+        
+            <td>
+                <button onclick="openEditPopup('<%=address._id%>','<%=address.fullName%>', '<%=address.houseName%>','<%=address.email%>','<%=address.mobile%>',
+                    '<%=address.streetAddr%>',
+                    '<%=address.city%>',
+                    '<%=address.state%>',
+                    '<%=address.country%>',
+                     '<%=address.pincode%>',
+                     '<%=address.delivery%>'
+        )">Edit</button>
+                <button onclick="deletAddress('<%=address._id%>')">Delete</button>
+            </td>
+        </tr>
+        <% })%>
+        <tr><td><button onclick="openAddPopup()">Add</button> </td></tr>
+        <!-- Other table rows -->
+    </tbody>
+</table>
+
+</div>
+<div id="Password" class="tabcontent">
+    <h1>password</h1>
+    <form id="passwordForm" onsubmit="validateForm(event)">
+        <div class="form-group">
+            <label for="password">Password:</label>
+            <input type="password" id="password" name="password" required>
+        </div>
+        <div class="form-group">
+            <label for="confirmPassword">Confirm Password:</label>
+            <input type="password" id="confirmPassword" name="confirmPassword" required>
+            <span id="passwordError" class="error-message"></span>
+        </div>
+        <button type="submit" >Submit</button>
+    </form>
+
+    <script>
+        function validateForm(event) {
+            event.preventDefault(); // Prevent form submission
+
+            // Get the password and confirm password fields
+            var passwordField = document.getElementById('password');
+            var confirmPasswordField = document.getElementById('confirmPassword');
+            var passwordError = document.getElementById('passwordError');
+
+            // Get the values entered by the user
+            var password = passwordField.value;
+            var confirmPassword = confirmPasswordField.value;
+
+            // Check if the passwords match
+            if (password !== confirmPassword) {
+                passwordError.textContent = 'Passwords do not match.';
+                confirmPasswordField.focus(); // Set focus to confirm password field
+            } else if (!validatePassword(password)) {
+            passwordError.textContent = 'Password must have at least one uppercase letter, one digit, one special character, and be at least 8 characters long.';
+            passwordField.focus(); // Set focus to password field
+        }
+            else {
+                passwordError.textContent = ''; // Clear error message
+                // Proceed with form submission or other actions
+                alert('Passwords match! Submitting form...');
+
+                  sendDataToServer(password); 
+            }
+        }
+        function validatePassword(password) {
+        // Define regular expressions for password criteria
+        var uppercaseRegex = /[A-Z]/;
+        var digitRegex = /[0-9]/;
+        var specialCharRegex = /[!@#$%^&*()_+\-=[\]{};':"\\|,.<>/?]/;
+        var minLength = 8;
+
+        // Check if password meets all criteria
+        return (
+            password.length >= minLength &&
+            uppercaseRegex.test(password) &&
+            digitRegex.test(password) &&
+            specialCharRegex.test(password)
+        );
+    }
+        // Function to send password data to the server using fetch
+        function sendDataToServer(password) {
+            
+            fetch('/passwordnew', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    // Add any other headers if needed
+                },
+                body: JSON.stringify({ newPassword:password })
+            })
+            .then(response => {
+                if (response.ok) {
+                    
+                    // Handle successful response from the server
+                    alert('Password data sent successfully haha!');
+                    // You can perform further actions here
+                    window.location.reload();
+                } else {
+                    // Handle error response from the server
+                    alert('Error sending password data.');
+                }
+            })
+            .catch(error => {
+                // Handle fetch error
+                console.error('Error:', error);
+                alert('Error sending password data.');
+            });
+        }
+    </script>
+</div>
+<div id="Tokyo" class="tabcontent">
+  <h3>Orders</h3>
+  <table class="table">
+    <thead class="thead-dark">
+      <tr>
+        
+        <th scope="col">product</th>
+        <th scope="col">Date of Purchase</th>
+        <th scope="col">Order Again</th>
+      </tr>
+    </thead>
+    <tbody>
+    <% orders.forEach((order,index)=> { %>
+        <% order.products.forEach(product=> { %>
+            
+      <tr>
+        
+        <td>
+            <div class="col-md-2 d-flex ">
+              <img src="upload/products/<%= product.product.images[0] %>"
+                    class="img-thumbnail image-container" alt="Product Image">
+                    Product : <%= product.product.name %>
+                    
+            </div>
+            
+        </td>
+        <td>
+            <div >
+                <% const date = new Date(order.orderDate); %>
+                <% const formattedDate = date.toLocaleDateString('en-US', {
+                    year: 'numeric',
+                    month: 'short',
+                    day: '2-digit',
+                }); %>
+                <%= formattedDate %>
+            </div>
+        </td>
+        <td><a href="/sproducts_page/<%= product.product._id %>" class="order-link">Order Now</a></td>
+
+
+      </tr>
+      <%})%>
+     <%})%>
+    </tbody>
+    <style>
+        .order-link {
+    color: blue; /* Default color */
+    text-decoration: none; /* Remove underline */
+}
+
+.order-link:hover {
+    color: red; /* Change color on hover */
+}
+
+
+    </style>
+  </table>
+  
+  
+</div>
+
+<script>
+function openCity(evt, cityName) {
+  var i, tabcontent, tablinks;
+  tabcontent = document.getElementsByClassName("tabcontent");
+  for (i = 0; i < tabcontent.length; i++) {
+    tabcontent[i].style.display = "none";
+  }
+  tablinks = document.getElementsByClassName("tablinks");
+  for (i = 0; i < tablinks.length; i++) {
+    tablinks[i].className = tablinks[i].className.replace(" active", "");
+  }
+  document.getElementById(cityName).style.display = "block";
+  evt.currentTarget.className += " active";
+}
+
+// Get the element with id="defaultOpen" and click on it
+document.getElementById("defaultOpen").click();
+</script>
+  
         
 
 </div>
-</form>
-    <!-- Include your address details here -->
-</section>
+
+  
+
+
+
+
+
 </div>
 </div>
 </div>
+ 
+
 <%- include('../users/userFooter.ejs') %>
 
 
@@ -186,66 +546,344 @@
 <script>
 
     
-document.addEventListener("DOMContentLoaded", function() {
-    // Add an event listener to the form submit event
-    document.getElementById("editProfileForm").addEventListener("submit", function(event) {
-        // Select all input and textarea elements within the form
-        const formInputs = this.querySelectorAll("input, textarea");
-        let isValid = true;
-
-        // Regular expression for email validation
-        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-
-        // Regular expression for mobile number validation
-        const mobileRegex = /^[0-9]{10}$/;
-
-        // Iterate over each input element
-        formInputs.forEach(function(input) {
-            // Trim the value of each input element
-            input.value = input.value.trim();
-
-            // Perform validation based on input type
-            switch (input.type) {
-                case "text":
-                case "textarea":
-                    // Check if the input value is empty
-                    if (input.value === "") {
-                        isValid = false;
-                        // Add a class to indicate invalid input
-                        input.classList.add("is-invalid");
-                    } else {
-                        // Remove any existing invalid class
-                        input.classList.remove("is-invalid");
-                    }
-                    break;
-                case "email":
-                    // Check if the email format is valid
-                    if (!emailRegex.test(input.value)) {
-                        isValid = false;
-                        input.classList.add("is-invalid");
-                    } else {
-                        input.classList.remove("is-invalid");
-                    }
-                    break;
-                case "tel":
-                    // Check if the mobile number format is valid
-                    if (!mobileRegex.test(input.value)) {
-                        isValid = false;
-                        input.classList.add("is-invalid");
-                    } else {
-                        input.classList.remove("is-invalid");
-                    }
-                    break;
-            }
-        });
-
-        // Prevent form submission if validation fails
-        if (!isValid) {
-            // Prevent the default form submission behavior
-            event.preventDefault();
-        }
-    });
-});
-
 
 </script>
+
+
+
+<script>
+    function openCity(evt, cityName) {
+      var i, tabcontent, tablinks;
+      tabcontent = document.getElementsByClassName("tabcontent");
+      for (i = 0; i < tabcontent.length; i++) {
+        tabcontent[i].style.display = "none";
+      }
+      tablinks = document.getElementsByClassName("tablinks");
+      for (i = 0; i < tablinks.length; i++) {
+        tablinks[i].className = tablinks[i].className.replace(" active", "");
+      }
+      document.getElementById(cityName).style.display = "block";
+      evt.currentTarget.className += " active";
+    }
+    
+    // Get the element with id="defaultOpen" and click on it
+   document.getElementById("defaultOpen").click();
+    </script>
+
+
+<script>
+  // Function to open the Edit popup with address data
+function openEditPopup(id,name,houseName, email, mobile,streetAddr,city,state,country,pincode,delivery) {
+    
+    document.getElementById('addressId').value=id;
+    document.getElementById('editName').value = name;
+    document.getElementById('editHouseName').value = houseName;
+    document.getElementById('editEmail').value = email;
+    document.getElementById('editMobile').value = mobile;
+    document.getElementById('editStreetAddr').value = streetAddr;
+    document.getElementById('editCity').value = city;
+
+    document.getElementById('editState').value = state;
+
+    document.getElementById('editCountry').value = country;
+    
+    document.getElementById('editPincode').value = pincode;
+   
+
+    // Assume deliveryValue is the boolean value retrieved from the database
+var deliveryValue = delivery; // Example value from the database
+
+// Convert the boolean value to a string if necessary (depends on how your database returns the value)
+var deliveryString = deliveryValue ? "true" : "false";
+
+// Set the checkbox state based on the delivery value
+document.getElementById('editdeliveryCheckbox').checked = true?true:false;
+document.getElementById('editdeliveryCheckbox').value = true;
+document.getElementById('editPopup').style.display = 'block';
+}
+function deletAddress(id)
+{
+    const confirmed=confirm("Are you want to delete?");
+    if(confirmed)
+    {
+    var id=id;
+    fetch('/deletAddress', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ id:id })
+    })
+    .then(
+        response => {
+        if (response.ok) {
+            console.log('deleted.');
+            window.location.reload();
+
+             // Reload or update the content of the "Address" tab after deletion
+             updateAddressTab();
+        } else {
+            console.error('Error deleting.');
+        }
+    }
+    )
+    .catch(error => {
+        console.error('Error:', error);
+    });
+}else{
+    console.log('Deletion canceled.'); 
+}
+}
+
+// Function to open the Add popup
+function openAddPopup() {
+    document.getElementById('addPopup').style.display = 'block';
+}
+
+// Function to close a popup by ID
+function closePopup(popupId) {
+    document.getElementById(popupId).style.display = 'none';
+}
+
+
+// Function to save edits (you can modify this to send data to the server)
+function saveEdit() {
+    // Retrieve edited data from the form
+    const id=document.getElementById('addressId').value;
+    const fullName = document.getElementById('editName').value.trim();
+    const houseName = document.getElementById('editHouseName').value.trim();
+    const streetAddress = document.getElementById('editStreetAddr').value.trim();
+    
+    const city = document.getElementById('editCity').value.trim();
+    const state = document.getElementById('editState').value.trim();
+    const country = document.getElementById('editCountry').value.trim();
+    const postcode = document.getElementById('editPincode').value.trim();
+    const phone = document.getElementById('editMobile').value.trim();
+    const email = document.getElementById('editEmail').value.trim();
+    const delivery=document.getElementById('editdeliveryCheckbox').value;
+
+    // Update the table or send data to the server
+    console.log("Edited Name:", fullName);
+    console.log("Edited Email:", email);
+    console.log("Edited Mobile:", delivery);
+     // Validate form fields
+     if (!fullName || !email || !phone ||!houseName || !postcode || !city || !state ||!streetAddress) {
+        alert('Please fill in all required fields.');
+        return; // Stop further execution if any required field is empty
+    }
+
+    // Validate email format
+    if (!/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/.test(email)) {
+        alert('Please enter a valid email address.');
+        return; // Stop further execution if email format is invalid
+    }
+
+    // Validate phone number format (optional based on your requirements)
+    if (!/^[0-9]{10}$/.test(phone)) {
+        alert('Please enter a 10-digit mobile number.');
+        return; // Stop further execution if phone number format is invalid
+    }
+
+    const formData = {
+        id:id,
+        fullName: fullName,
+        houseName:houseName,
+        streetAddress: streetAddress,
+        country:country,
+        city: city,
+        state: state,
+        postcode: postcode,
+        mobile: phone,
+        email: email,
+    delivery:delivery};
+        fetch('/editAddress', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(formData)
+    })
+    .then(
+        response => {
+        if (response.ok) {
+            console.log('dupdated.');
+            window.location.reload();
+
+             // Reload or update the content of the "Address" tab after deletion
+             
+        } else {
+            console.error('Error deleting.');
+        }
+    }
+    )
+    .catch(error => {
+        console.error('Error:', error);
+    });
+    // Add the new data to the table or send data to the server
+    console.log("New Name:", fullName);
+    console.log("New Email:", email);
+    console.log("New Mobile:", phone);
+    console.log('delivery',delivery);
+
+ 
+    // Close the Edit popup
+    closePopup('editPopup');
+}
+
+// Function to save new data (you can modify this to send data to the server)
+function saveAdd() {
+    // Retrieve new data from the form
+    const newfullName = document.getElementById('addName').value.trim();
+    const newhouseName = document.getElementById('addHouseName').value.trim();
+    const newstreetAddress = document.getElementById('addStreetAddr').value.trim();
+    const newcity = document.getElementById('addCity').value.trim();
+    const newstate = document.getElementById('addState').value.trim();
+    const newcountry = document.getElementById('addCountry').value.trim();
+    const newpostcode = document.getElementById('addPincode').value.trim();
+    const newphone = document.getElementById('addMobile').value.trim();
+    const newemail = document.getElementById('addEmail').value.trim();
+    const newdelivery = document.getElementById('adddeliveryCheckbox').checked; // Use checked property for checkbox
+
+    // Validate form fields
+    if (!newfullName || !newemail || !newphone ||!newhouseName || !newpostcode || !newcity || !newstate ||!newstreetAddress) {
+        alert('Please fill in all required fields.');
+        return; // Stop further execution if any required field is empty
+    }
+
+    // Validate email format
+    if (!/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/.test(newemail)) {
+        alert('Please enter a valid email address.');
+        return; // Stop further execution if email format is invalid
+    }
+
+    // Validate phone number format (optional based on your requirements)
+    if (!/^[0-9]{10}$/.test(newphone)) {
+        alert('Please enter a 10-digit mobile number.');
+        return; // Stop further execution if phone number format is invalid
+    }
+
+    // Construct the form data object
+    const formData = {
+        fullName: newfullName,
+        houseName: newhouseName,
+        streetAddress: newstreetAddress,
+        country: newcountry,
+        city: newcity,
+        state: newstate,
+        postcode: newpostcode,
+        phone: newphone,
+        email: newemail,
+        delivery: newdelivery
+    };
+
+    // Send the form data to the server using fetch
+    fetch('/addNewAddress', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(formData)
+    })
+    .then(response => {
+        if (response.ok) {
+            console.log('Data updated successfully.');
+            window.location.reload();
+            // Reload or update the content of the "Address" tab after successful update
+            updateAddressTab();
+        } else {
+            console.error('Error updating data.');
+        }
+    })
+    .catch(error => {
+        console.error('Error:', error);
+    });
+
+    // Log the new data (optional)
+    console.log("New Name:", newfullName);
+    console.log("New Email:", newemail);
+    console.log("New Mobile:", newphone);
+    console.log('Delivery:', newdelivery);
+
+    // Close the Add popup (if it's a modal)
+    closePopup('addPopup');
+}
+
+  
+
+
+
+function updateAddressTab() {
+    // Fetch updated address data from the server
+    fetch('/fetchUpdatedAddressData')
+        .then(response => response.json())
+        .then(data => {
+            // Update the content of the "Address" tab with the new data
+            var addressTable = document.getElementById('addressTable');
+            // Clear existing content
+            addressTable.innerHTML = '';
+            // Append new rows based on the updated data
+            data.address.forEach(address => {
+                var row = '<tr>';
+                row += `<td>${address.fullName}</td>`;
+                row += `<td>${address.houseName}</td>`;
+                row += `<td>${address.email}</td>`;
+                row += `<td>${address.mobile}</td>`;
+                // Add more columns as needed
+                row += '</tr>';
+                addressTable.innerHTML += row;
+            });
+        })
+        .catch(error => {
+            console.error('Error fetching updated address data:', error);
+        });
+}
+
+</script>
+
+
+<script>
+    //test code for active ******
+    document.addEventListener("DOMContentLoaded", function() {
+      // Get the active tab from localStorage
+      var activeTab = localStorage.getItem('activeTab');
+      if (activeTab) {
+        // Activate the tab if it's stored
+        document.getElementById(activeTab).click();
+      } else {
+        // Default to the first tab if no active tab is stored
+        document.getElementById('defaultOpen').click();
+      }
+    
+      // Add event listeners to tab buttons
+      var tabLinks = document.querySelectorAll('.tablinks');
+      tabLinks.forEach(function(tab) {
+        tab.addEventListener('click', function() {
+          // Store the active tab in localStorage
+          localStorage.setItem('activeTab', this.id);
+        });
+      });
+    });
+    
+    function openCity(evt, cityName) {
+      var i, tabcontent, tablinks;
+    
+      // Hide all tab content
+      tabcontent = document.getElementsByClassName("tabcontent");
+      for (i = 0; i < tabcontent.length; i++) {
+        tabcontent[i].style.display = "none";
+      }
+    
+      // Deactivate all tab links
+      tablinks = document.querySelectorAll('.tablinks');
+      for (i = 0; i < tablinks.length; i++) {
+        tablinks[i].className = tablinks[i].className.replace(" active", "");
+      }
+    
+      // Show the selected tab content and activate the button
+      document.getElementById(cityName).style.display = "block";
+      evt.currentTarget.className += " active";
+    }
+
+
+    
+    </script>

@@ -55,23 +55,27 @@
 
         <div class="mb-3">
             <label for="price" class="form-label">Price:</label>
-            <input type="number" class="form-control" id="price" name="price" value="0" required>
+            <input type="number" class="form-control" id="price" name="price" value="0"min="0" required>
         </div>
 
         <div class="mb-3">
             <label for="stock" class="form-label">Stock:</label>
-            <input type="number" class="form-control" id="stock" name="stock" value="0" required>
+            <input type="number" class="form-control" id="stock" name="stock" value="0"  min= "0"required>
         </div>
 
         <div class="mb-3">
-            <label for="image" class="form-label">Main Image:</label>
-            <input type="file" class="form-control" id="image" name="image" >
+            <label for="image" class="form-label">1st Image:</label>
+            <input type="file" class="form-control" id="image1" name="image" >
         </div>
-
         <div class="mb-3">
-            <label for="images" class="form-label">Additional Images:</label>
-            <input type="file" class="form-control" id="images" name="images" multiple>
+            <label for="image" class="form-label">2nd Image:</label>
+            <input type="file" class="form-control" id="image2" name="image" required>
         </div>
+        <div class="mb-3">
+            <label for="image" class="form-label">3rd Image:</label>
+            <input type="file" class="form-control" id="image3" name="image" required>
+        </div>
+      
         <div class="mb-3 form-check">
             <input type="checkbox" class="form-check-input" id="active" name="active" value="true">
             <label class="form-check-label" for="active">Active </label>

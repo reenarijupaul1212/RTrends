@@ -20,7 +20,7 @@
                                     <h6>Summer Collection</h6>
                                    
                                     <p><%=banner.description%>.</p>
-                                    <a href="/products_page" class="primary-btn">Shop now <span class="arrow_right"></span></a>
+                                    <a href="/product" class="primary-btn">Shop now <span class="arrow_right"></span></a>
                                     <div class="hero__social">
                                         <a href="#"><i class="fa fa-facebook"></i></a>
                                         <a href="#"><i class="fa fa-twitter"></i></a>
@@ -45,38 +45,34 @@
         <section class="product spad">
             <div class="container">
                 <div class="row">
-                    <div class="col-lg-12 col-md-9  mt-lg-0">
+                    <div class="col-lg-12 col-md-9 mt-lg-0">
                         <ul class="filter__controls">
                             <li class="active" data-filter="*">Best Sellers</li>
                             <li data-filter=".new-arrivals">New Arrivals</li>
                             <li data-filter=".hot-sales">Hot Sales</li>
                         </ul>
                     </div>
+                    
                 </div>
                 <div class="row product__filterjustify-content-center  justify-content-center">
                     <% if(products && products.length> 0 ) {%>
 
                         <% for(let i=0; i < products.length ;i++) { %>
 
-                            <div class="col-lg-4 col-md-4 col-12  m-0" style="max-width: 262px;">
+                            <div class="col-lg-4 col-md-4 col-12  m-0 product__item<%= products[i].onOffer == true ? 'new-arrivals' : '' %>" style="max-width: 262px;">
 
                                 <div class="product__item">
-                                    <div click-id="productDetailsLink" group-id="<%=products[i].groupingID%>"
-                                        color-id="<%=products[i].color%>"
+                                    <div  group-id="<%=products[i].groupingID%>"
+                                        
                                         class="product__item__pic set-bg add-hover mt-1" data-id="bg-render"
-                                        data-for-bg="/upload/products/<%=products[i].image%>"
+                                        data-for-bg="/upload/products/<%=products[i].images[0]%>"
                                         style="background-size: cover;background-position: top;
                                         background-repeat: no-repeat;">
 
 
 
                                         <ul class="product__hover">
-                                            <li>
-                                                <button data-id="<%=products[i]._id%>"
-                                                    class="nav-link wishListBtn "><img src="/img/icon/heart.png"
-                                                        alt=""> <span>Wish List</span></button>
-
-                                            </li>
+                                            <li><a href="" onclick="addToWishlist('<%=products[i]._id%>')"><img src="img/icon/heart.png" alt=""></a></li>
                                             <li><a href="#"><img src="/img/icon/compare.png" alt="">
                                                     <span>Compare</span></a>
                                             </li>
@@ -229,5 +225,52 @@
 
 
         <%- include('../users/userFooter.ejs') %>
-
+<script src="js/main.js"></script>
             <%- include('../layouts/footer.ejs') %>
+
+            <script>
+       function addToWishlist(productId) {
+        event.preventDefault();
+        fetch('/addToWishlist', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ productId })
+        })
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Failed to add product to wishlist');
+            }
+            return response.json();
+        })
+        .then(data => {
+            console.log(data); // Handle success response (optional)
+            alert('Product added to wishlist successfully');
+        })
+        .catch(error => {
+            console.error('Error adding product to wishlist:', error);
+            alert('Failed to add product to wishlistssss',error);
+        });
+    }
+               
+            </script>    
+            <script>
+                // Function to filter products based on data-filter attribute
+                document.addEventListener('DOMContentLoaded', function () {
+               
+                    function filterProducts(filterValue) {
+    const products = document.querySelectorAll('.product__item'); // Select all product items
+
+    products.forEach(product => {
+        if (filterValue === '*' || product.classList.contains(filterValue)) {
+            product.style.display = 'block'; // Show products that match the filter or show all if filter is '*'
+        } else {
+            product.style.display = 'none'; // Hide products that do not match the filter
+        }
+    });
+}
+
+            });
+            </script>
+            

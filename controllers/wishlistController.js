@@ -8,8 +8,10 @@ module.exports={
 
    addToWishList: async (req, res, next) => {
     const { productId } = req.body;
+   
     const userId = req.user._id; // Assuming user is authenticated and user object is available in req.user
-
+    
+      
     try {
         // Find the user by ID
         const user = await User.findById(userId).populate('wishlist');
@@ -28,7 +30,7 @@ module.exports={
         } else {
             // Check if product already exists in wishlist
             if (user.wishlist.products.includes(productId)) {
-                return res.status(400).json({ success: false, message: "Product already exists in wishlist" });
+                return res.status(400).json({ success:false, message: "Product already exists in wishlist" });
             }
             user.wishlist.products.push(productId);
             await user.wishlist.save();
@@ -37,12 +39,13 @@ module.exports={
         // Save the updated user
         await user.save();
 
-        return res.status(200).json({ success: true, message: "Product added to wishlist successfully" });
+        return res.status(202).json({ success:true, message: "Product added to wishlist successfully" });
     } catch (error) {
         console.error(error);
-        return res.status(500).json({ success: false, message: "Internal server error" });
+        return res.status(500).json({ success:false, message: "Internal server error" });
     }
 },
+
 WishListPage: async (req, res) => {
     const userID = req.user._id;
     try {

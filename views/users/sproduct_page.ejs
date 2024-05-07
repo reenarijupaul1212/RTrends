@@ -24,7 +24,7 @@
                     <div class="large-image-col" style="flex: 2; position: relative;">
                         <% if (product) { %>
                         <img class="img-fluid w-100 pb-1 zoo-item" 
-                             src="/upload/products/<%= product.image %>" 
+                             src="/upload/products/<%= product.images[0] %>" 
                              id="mainimg" 
                              alt="<%= product.name %>"
                              onmousemove="zoomImage(event)">
