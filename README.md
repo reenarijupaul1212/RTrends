@@ -1,4 +1,4 @@
-# Project Name
+# RTrnds Ecommerse Project 📌
 
 ## Table of Contents
 - [Introduction](#introduction)
